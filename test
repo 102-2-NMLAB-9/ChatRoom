@@ -1,7 +1,4 @@
 #include<iostream>
-<<<<<<< HEAD
 #include<vector>
-=======
 #include<string>
 #include<algorithm>
->>>>>>> 95ec1cffdf189053998bec1e7b23d73279bfa66b
