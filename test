@@ -1,2 +1,11 @@
 #include<iostream>
+#include<vector>
 #include<string>
+<<<<<<< HEAD
+=======
+#include<algorithm>
+//46546541658
+// 123456
+oao test
+
+>>>>>>> FETCH_HEAD
