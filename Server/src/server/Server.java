@@ -82,8 +82,8 @@ public class Server {
                         JOptionPane.ERROR_MESSAGE);   
             }  
             else{
-                sendServerMessage(message);// 群发服务器消息  
-                contentArea.append("服务器说：" + txt_message.getText() + "\r\n");  
+                sendServerMessage(txt_message.getText());// 群发服务器消息  
+                contentArea.append("伺服器公告：" + txt_message.getText() + "\n");  
                 txt_message.setText(null);  
             }
         }
@@ -91,29 +91,29 @@ public class Server {
   
     // 构造放法  
     public Server() {  
-        frame = new JFrame("服务器");  
+        frame = new JFrame("伺服器");  
         // 更改JFrame的图标：  
         //frame.setIconImage(Toolkit.getDefaultToolkit().createImage(Client.class.getResource("qq.png")));  
         //frame.setIconImage(Toolkit.getDefaultToolkit().createImage(Server.class.getResource("qq.png")));  
         contentArea = new JTextArea();  
         contentArea.setEditable(false);  
-        contentArea.setForeground(Color.blue);  
+        contentArea.setForeground(Color.red);  
         txt_message = new JTextField();  
         txt_max = new JTextField("30");  
-        txt_port = new JTextField("6666");  
-        btn_start = new JButton("启动");  
-        btn_stop = new JButton("停止");  
-        btn_send = new JButton("发送");  
+        txt_port = new JTextField("5566");  
+        btn_start = new JButton("啟動");  
+        btn_stop = new JButton("終止");  
+        btn_send = new JButton("send");  
         btn_stop.setEnabled(false);  
         listModel = new DefaultListModel();  
         userList = new JList(listModel);  
   
         southPanel = new JPanel(new BorderLayout());  
-        southPanel.setBorder(new TitledBorder("写消息"));  
+        southPanel.setBorder(new TitledBorder("公告"));  
         southPanel.add(txt_message, "Center");  
         southPanel.add(btn_send, "East");  
         leftPanel = new JScrollPane(userList);  
-        leftPanel.setBorder(new TitledBorder("在线用户"));  
+        leftPanel.setBorder(new TitledBorder("在線用戶"));  
   
         rightPanel = new JScrollPane(contentArea);  
         rightPanel.setBorder(new TitledBorder("消息显示区"));  
