@@ -68,24 +68,25 @@ public class Server {
     // 执行消息发送  
     public void send() {  
         if (!isStart) {  
-            JOptionPane.showMessageDialog(frame, "服务器还未启动,不能发送消息！", "错误",  
+            JOptionPane.showMessageDialog(null, "司服器尚未啟動，請不要猴急！", "Error",  
                     JOptionPane.ERROR_MESSAGE);  
-            return;  
         }  
-        if (clients.size() == 0) {  
-            JOptionPane.showMessageDialog(frame, "没有用户在线,不能发送消息！", "错误",  
+        else if (clients.size() == 0) {  
+            JOptionPane.showMessageDialog(null, "沒有用戶連線，只能和空氣說話！", "Error",  
                     JOptionPane.ERROR_MESSAGE);  
-            return;  
         }  
-        String message = txt_message.getText().trim();  
-        if (message == null || message.equals("")) {  
-            JOptionPane.showMessageDialog(frame, "消息不能为空！", "错误",  
-                    JOptionPane.ERROR_MESSAGE);  
-            return;  
-        }  
-        sendServerMessage(message);// 群发服务器消息  
-        contentArea.append("服务器说：" + txt_message.getText() + "\r\n");  
-        txt_message.setText(null);  
+        else {
+            String message = txt_message.getText().trim();  
+            if (message == null || message.equals("")) {  
+                JOptionPane.showMessageDialog(null, "請不要亂發廢文！", "Error",  
+                        JOptionPane.ERROR_MESSAGE);   
+            }  
+            else{
+                sendServerMessage(message);// 群发服务器消息  
+                contentArea.append("服务器说：" + txt_message.getText() + "\r\n");  
+                txt_message.setText(null);  
+            }
+        }
     }  
   
     // 构造放法  
