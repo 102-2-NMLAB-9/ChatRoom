@@ -5,6 +5,7 @@
  */
 
 package server;
+
 import java.awt.BorderLayout;  
 import java.awt.Color;  
 import java.awt.GridLayout;  
@@ -47,11 +48,14 @@ public class Server {
     private JButton btn_stop;  
     private JButton btn_send;  
     private JPanel northPanel;  
-    private JPanel southPanel;  
+    private JPanel southPanel;
+    private JPanel westPanel;
     private JScrollPane rightPanel;  
-    private JScrollPane leftPanel;  
+    private JScrollPane leftPanel;
+    private JScrollPane leftpanel;
     private JSplitPane centerSplit;  
-    private JList userList;  
+    private JList userList;
+    private JList roomList;
     private DefaultListModel listModel;  
   
     private ServerSocket serverSocket;  
@@ -106,19 +110,25 @@ public class Server {
         btn_send = new JButton("send");  
         btn_stop.setEnabled(false);  
         listModel = new DefaultListModel();  
-        userList = new JList(listModel);  
+        userList = new JList(listModel);
+        roomList = new JList(listModel);
   
         southPanel = new JPanel(new BorderLayout());  
         southPanel.setBorder(new TitledBorder("公告"));  
         southPanel.add(txt_message, "Center");  
-        southPanel.add(btn_send, "East");  
+        southPanel.add(btn_send, "East");
+        westPanel = new JPanel(new BorderLayout());
+        leftpanel = new JScrollPane(roomList);
+        leftpanel.setBorder(new TitledBorder("房間列表"));
         leftPanel = new JScrollPane(userList);  
         leftPanel.setBorder(new TitledBorder("在線用戶"));  
+        westPanel.add(leftpanel, "North");
+        westPanel.add(leftPanel, "Center");
   
         rightPanel = new JScrollPane(contentArea);  
         rightPanel.setBorder(new TitledBorder("消息显示区"));  
   
-        centerSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel,  
+        centerSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westPanel,  
                 rightPanel);  
         centerSplit.setDividerLocation(100);  
         northPanel = new JPanel();  
@@ -135,7 +145,7 @@ public class Server {
         frame.add(northPanel, "North");  
         frame.add(centerSplit, "Center");  
         frame.add(southPanel, "South");  
-        frame.setSize(600, 400);  
+        frame.setSize(800, 600);  
         //frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());//设置全屏  
         int screen_width = Toolkit.getDefaultToolkit().getScreenSize().width;  
         int screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;  

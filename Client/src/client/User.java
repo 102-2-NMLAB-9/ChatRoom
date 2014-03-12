@@ -4,18 +4,22 @@
  * and open the template in the editor.
  */
 
+package client;
+
 /**
  *
  * @author nmlab212
  */
-package client;
+
 public class User {
     private String name;  
     private String ip;  
+    private String roomId;
   
     public User(String name, String ip) {  
         this.name = name;  
         this.ip = ip;  
+        this.roomId = "";
     }  
   
     public String getName() {  
@@ -33,4 +37,12 @@ public class User {
     public void setIp(String ip) {  
         this.ip = ip;  
     }  
+    
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+    
+    public String getRoomId() {
+        return roomId;
+    }
 } 

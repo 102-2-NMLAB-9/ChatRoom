@@ -39,7 +39,8 @@ import javax.swing.border.TitledBorder;
 public class Client{  
   
     private JFrame frame;  
-    private JList userList;  
+    private JList userList;
+    private JList roomList;
     private JTextArea textArea;  
     private JTextField textField;  
     private JTextField txt_port;  
@@ -49,9 +50,11 @@ public class Client{
     private JButton btn_stop;  
     private JButton btn_send;  
     private JButton btn_room;
+    private JPanel westPanel;
     private JPanel northPanel;  
     private JPanel southPanel;  
-    private JScrollPane rightScroll;  
+    private JScrollPane rightScroll;
+    private JScrollPane leftscroll;
     private JScrollPane leftScroll;  
     private JSplitPane centerSplit;  
   
@@ -100,7 +103,8 @@ public class Client{
         btn_send = new JButton("發送");  
         btn_room = new JButton("開房間");
         listModel = new DefaultListModel();  
-        userList = new JList(listModel);  
+        userList = new JList(listModel);
+        roomList = new JList(listModel);
   
         northPanel = new JPanel();  
         northPanel.setLayout(new GridLayout(1, 10));  
@@ -115,16 +119,21 @@ public class Client{
         northPanel.setBorder(new TitledBorder("连接信息"));  
   
         rightScroll = new JScrollPane(textArea);  
-        rightScroll.setBorder(new TitledBorder("消息显示区"));  
+        rightScroll.setBorder(new TitledBorder("消息显示区"));
+        westPanel = new JPanel(new BorderLayout());
+        leftscroll = new JScrollPane(roomList);
+        leftscroll.setBorder(new TitledBorder("房間列表"));
         leftScroll = new JScrollPane(userList);  
-        leftScroll.setBorder(new TitledBorder("在线用户"));  
+        leftScroll.setBorder(new TitledBorder("在线用户"));
+        westPanel.add(leftscroll, "North");
+        westPanel.add(leftScroll, "Center");
         southPanel = new JPanel(new BorderLayout());  
         southPanel.add(textField, "Center");  
         southPanel.add(btn_send, "East");  
         southPanel.add(btn_room, "West");
         southPanel.setBorder(new TitledBorder("發消息"));  
   
-        centerSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftScroll,  
+        centerSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westPanel,  
                 rightScroll);  
         centerSplit.setDividerLocation(100);  
   
@@ -135,7 +144,7 @@ public class Client{
         frame.add(northPanel, "North");  
         frame.add(centerSplit, "Center");  
         frame.add(southPanel, "South");  
-        frame.setSize(600, 400);  
+        frame.setSize(800, 600);  
         int screen_width = Toolkit.getDefaultToolkit().getScreenSize().width;  
         int screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;  
         frame.setLocation((screen_width - frame.getWidth()) / 2,  
@@ -212,7 +221,10 @@ public class Client{
         
         btn_room.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                if (!isConnected) {
+                    JOptionPane.showMessageDialog(frame, "尚未連線!",  
+                            "錯誤", JOptionPane.ERROR_MESSAGE);  
+                }
             }
         });
   
