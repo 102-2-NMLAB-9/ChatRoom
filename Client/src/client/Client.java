@@ -48,6 +48,7 @@ public class Client{
     private JButton btn_start;  
     private JButton btn_stop;  
     private JButton btn_send;  
+    private JButton btn_room;
     private JPanel northPanel;  
     private JPanel southPanel;  
     private JScrollPane rightScroll;  
@@ -91,17 +92,18 @@ public class Client{
         textArea.setEditable(false);  
         textArea.setForeground(Color.blue);  
         textField = new JTextField();  
-        txt_port = new JTextField("6666");  
+        txt_port = new JTextField("5566");  
         txt_hostIp = new JTextField("127.0.0.1");  
         txt_name = new JTextField("xiaoqiang");  
-        btn_start = new JButton("连接");  
-        btn_stop = new JButton("断开");  
-        btn_send = new JButton("发送");  
+        btn_start = new JButton("連接");  
+        btn_stop = new JButton("斷開");  
+        btn_send = new JButton("發送");  
+        btn_room = new JButton("開房間");
         listModel = new DefaultListModel();  
         userList = new JList(listModel);  
   
         northPanel = new JPanel();  
-        northPanel.setLayout(new GridLayout(1, 7));  
+        northPanel.setLayout(new GridLayout(1, 10));  
         northPanel.add(new JLabel("端口"));  
         northPanel.add(txt_port);  
         northPanel.add(new JLabel("服务器IP"));  
@@ -119,7 +121,8 @@ public class Client{
         southPanel = new JPanel(new BorderLayout());  
         southPanel.add(textField, "Center");  
         southPanel.add(btn_send, "East");  
-        southPanel.setBorder(new TitledBorder("写消息"));  
+        southPanel.add(btn_room, "West");
+        southPanel.setBorder(new TitledBorder("發消息"));  
   
         centerSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftScroll,  
                 rightScroll);  
@@ -206,6 +209,12 @@ public class Client{
                 }  
             }  
         });  
+        
+        btn_room.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
   
         // 关闭窗口时事件  
         frame.addWindowListener(new WindowAdapter() {  
