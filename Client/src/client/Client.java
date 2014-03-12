@@ -58,7 +58,8 @@ public class Client{
     private JScrollPane leftScroll;  
     private JSplitPane centerSplit;  
   
-    private DefaultListModel listModel;  
+    private DefaultListModel listModel;
+    private DefaultListModel listmodel;
     private boolean isConnected = false;  
   
     private Socket socket;  
@@ -103,8 +104,9 @@ public class Client{
         btn_send = new JButton("發送");  
         btn_room = new JButton("開房間");
         listModel = new DefaultListModel();  
+        listmodel = new DefaultListModel();
         userList = new JList(listModel);
-        roomList = new JList(listModel);
+        roomList = new JList(listmodel);
   
         northPanel = new JPanel();  
         northPanel.setLayout(new GridLayout(1, 10));  

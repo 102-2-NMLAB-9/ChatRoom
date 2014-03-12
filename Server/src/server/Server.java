@@ -56,7 +56,8 @@ public class Server {
     private JSplitPane centerSplit;  
     private JList userList;
     private JList roomList;
-    private DefaultListModel listModel;  
+    private DefaultListModel listModel;
+    private DefaultListModel listmodel;
   
     private ServerSocket serverSocket;  
     private ServerThread serverThread;  
@@ -110,8 +111,9 @@ public class Server {
         btn_send = new JButton("send");  
         btn_stop.setEnabled(false);  
         listModel = new DefaultListModel();  
+        listmodel = new DefaultListModel();
         userList = new JList(listModel);
-        roomList = new JList(listModel);
+        roomList = new JList(listmodel);
   
         southPanel = new JPanel(new BorderLayout());  
         southPanel.setBorder(new TitledBorder("公告"));  
