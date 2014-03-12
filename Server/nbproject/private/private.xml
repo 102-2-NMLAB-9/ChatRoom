@@ -2,8 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
+        <group/>
+=======
         <group>
             <file>file:/C:/Users/nmlab212/EXP1/ChatRoom/Server/src/server/Server.java</file>
         </group>
+>>>>>>> 1f253f0c7589ecd3f7695cabef007f306861be7f
     </open-files>
 </project-private>
