@@ -8,12 +8,14 @@ package client;
 
 import java.awt.BorderLayout;  
 import java.awt.Color;  
+import java.awt.FlowLayout;
 import java.awt.GridLayout;  
 import java.awt.Toolkit;  
 import java.awt.event.ActionEvent;  
 import java.awt.event.ActionListener;  
 import java.awt.event.WindowAdapter;  
-import java.awt.event.WindowEvent;  
+import java.awt.event.WindowEvent;
+import java.awt.Frame;
 import java.io.BufferedReader;  
 import java.io.IOException;  
 import java.io.InputStreamReader;  
@@ -46,6 +48,7 @@ public class Client{
     private JTextField txt_port;  
     private JTextField txt_hostIp;  
     private JTextField txt_name;  
+    private JTextField txt_roomId;
     private JButton btn_start;  
     private JButton btn_stop;  
     private JButton btn_send;  
@@ -66,7 +69,7 @@ public class Client{
     private PrintWriter writer;  
     private BufferedReader reader;  
     private MessageThread messageThread;// 负责接收消息的线程  
-    private Map<String, User> onLineUsers = new HashMap<String, User>();// 所有在线用户  
+    private Map<String, User> onLineUsers = new HashMap<String, User>();// 所有在线用户
   
     // 主方法,程序入口  
     public static void main(String[] args) {  
@@ -91,14 +94,15 @@ public class Client{
     }  
   
     // 构造方法  
-    public Client() {  
+    public Client() {
         textArea = new JTextArea();  
         textArea.setEditable(false);  
         textArea.setForeground(Color.blue);  
         textField = new JTextField();  
         txt_port = new JTextField("5566");  
         txt_hostIp = new JTextField("127.0.0.1");  
-        txt_name = new JTextField("xiaoqiang");  
+        txt_name = new JTextField("xiaoqiang");
+        txt_roomId = new JTextField("lalala");
         btn_start = new JButton("連接");  
         btn_stop = new JButton("斷開");  
         btn_send = new JButton("發送");  
@@ -129,11 +133,12 @@ public class Client{
         leftScroll.setBorder(new TitledBorder("在线用户"));
         westPanel.add(leftscroll, "North");
         westPanel.add(leftScroll, "Center");
-        southPanel = new JPanel(new BorderLayout());  
-        southPanel.add(textField, "Center");  
-        southPanel.add(btn_send, "East");  
+        southPanel = new JPanel(new BorderLayout());   
         southPanel.add(btn_room, "West");
-        southPanel.setBorder(new TitledBorder("發消息"));  
+        southPanel.add(txt_roomId, "North");
+        southPanel.add(btn_send, "East");
+        southPanel.add(textField, "Center"); 
+        southPanel.setBorder(new TitledBorder("開房間、發送消息"));  
   
         centerSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westPanel,  
                 rightScroll);  
@@ -151,7 +156,7 @@ public class Client{
         int screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;  
         frame.setLocation((screen_width - frame.getWidth()) / 2,  
                 (screen_height - frame.getHeight()) / 2);  
-        frame.setVisible(true);  
+        frame.setVisible(true);
   
         // 写消息的文本框中按回车键时事件  
         textField.addActionListener(new ActionListener() {  
@@ -227,6 +232,9 @@ public class Client{
                     JOptionPane.showMessageDialog(frame, "尚未連線!",  
                             "錯誤", JOptionPane.ERROR_MESSAGE);  
                 }
+                else {
+                    new ChatRoom(frame, true, txt_roomId.getText());
+                }
             }
         });
   
@@ -235,7 +243,7 @@ public class Client{
             public void windowClosing(WindowEvent e) {  
                 if (isConnected) {  
                     closeConnection();// 关闭连接  
-                }  
+                }
                 System.exit(0);// 退出程序  
             }  
         });  
