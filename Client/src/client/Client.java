@@ -79,13 +79,13 @@ public class Client{
     // 执行发送  
     public void send() {  
         if (!isConnected) {  
-            JOptionPane.showMessageDialog(frame, "还没有连接服务器，无法发送消息！", "错误",  
+            JOptionPane.showMessageDialog(null, "還未連線，不能發送訊息！", "Error",  
                     JOptionPane.ERROR_MESSAGE);  
             return;  
         }  
         String message = textField.getText().trim();  
         if (message == null || message.equals("")) {  
-            JOptionPane.showMessageDialog(frame, "消息不能为空！", "错误",  
+            JOptionPane.showMessageDialog(null, "禁止發廢文！", "Error",  
                     JOptionPane.ERROR_MESSAGE);  
             return;  
         }  
@@ -103,9 +103,9 @@ public class Client{
         txt_hostIp = new JTextField("127.0.0.1");  
         txt_name = new JTextField("xiaoqiang");
         txt_roomId = new JTextField("lalala");
-        btn_start = new JButton("連接");  
+        btn_start = new JButton("連線");  
         btn_stop = new JButton("斷開");  
-        btn_send = new JButton("發送");  
+        btn_send = new JButton("send");  
         btn_room = new JButton("開房間");
         listModel = new DefaultListModel();  
         listmodel = new DefaultListModel();
@@ -114,23 +114,23 @@ public class Client{
   
         northPanel = new JPanel();  
         northPanel.setLayout(new GridLayout(1, 10));  
-        northPanel.add(new JLabel("端口"));  
+        northPanel.add(new JLabel("                       port"));  
         northPanel.add(txt_port);  
-        northPanel.add(new JLabel("服务器IP"));  
+        northPanel.add(new JLabel("              server IP"));  
         northPanel.add(txt_hostIp);  
-        northPanel.add(new JLabel("姓名"));  
+        northPanel.add(new JLabel("                      暱稱"));  
         northPanel.add(txt_name);  
         northPanel.add(btn_start);  
         northPanel.add(btn_stop);  
-        northPanel.setBorder(new TitledBorder("连接信息"));  
+        northPanel.setBorder(new TitledBorder(" "));  
   
         rightScroll = new JScrollPane(textArea);  
-        rightScroll.setBorder(new TitledBorder("消息显示区"));
+        rightScroll.setBorder(new TitledBorder("訊息區"));
         westPanel = new JPanel(new BorderLayout());
         leftscroll = new JScrollPane(roomList);
         leftscroll.setBorder(new TitledBorder("房間列表"));
         leftScroll = new JScrollPane(userList);  
-        leftScroll.setBorder(new TitledBorder("在线用户"));
+        leftScroll.setBorder(new TitledBorder("在線用戶"));
         westPanel.add(leftscroll, "North");
         westPanel.add(leftScroll, "Center");
         southPanel = new JPanel(new BorderLayout());   
@@ -144,7 +144,7 @@ public class Client{
                 rightScroll);  
         centerSplit.setDividerLocation(100);  
   
-        frame = new JFrame("客户机");  
+        frame = new JFrame("Client");  
         // 更改JFrame的图标：  
         //frame.setIconImage(Toolkit.getDefaultToolkit().createImage(Client.class.getResource("qq.png")));  
         frame.setLayout(new BorderLayout());  
@@ -177,30 +177,32 @@ public class Client{
             public void actionPerformed(ActionEvent e) {  
                 int port;  
                 if (isConnected) {  
-                    JOptionPane.showMessageDialog(frame, "已处于连接上状态，不要重复连接!",  
-                            "错误", JOptionPane.ERROR_MESSAGE);  
+                    JOptionPane.showMessageDialog(null, "已連線，請不要再連一次!",  
+                            "Error", JOptionPane.ERROR_MESSAGE);  
                     return;  
                 }  
                 try {  
                     try {  
-                        port = Integer.parseInt(txt_port.getText().trim());  
+                        port = Integer.parseInt(txt_port.getText());  
                     } catch (NumberFormatException e2) {  
-                        throw new Exception("端口号不符合要求!端口为整数!");  
+                        throw new Exception("port請輸入正整數!");  
+                    }  
+                   if (port <= 0) {  
+                        throw new Exception("port請輸入正整數！");  
                     }  
                     String hostIp = txt_hostIp.getText().trim();  
                     String name = txt_name.getText().trim();  
                     if (name.equals("") || hostIp.equals("")) {  
-                        throw new Exception("姓名、服务器IP不能为空!");  
+                        throw new Exception("有欄位未填!");  
                     }  
                     boolean flag = connectServer(port, hostIp, name);  
                     if (flag == false) {  
-                        throw new Exception("与服务器连接失败!");  
+                        throw new Exception("連線失敗QQ");  
                     }  
                     frame.setTitle(name);  
-                    JOptionPane.showMessageDialog(frame, "成功连接!");  
                 } catch (Exception exc) {  
-                    JOptionPane.showMessageDialog(frame, exc.getMessage(),  
-                            "错误", JOptionPane.ERROR_MESSAGE);  
+                    JOptionPane.showMessageDialog(null, exc.getMessage(),  
+                            "Error", JOptionPane.ERROR_MESSAGE);  
                 }  
             }  
         });  
@@ -209,19 +211,19 @@ public class Client{
         btn_stop.addActionListener(new ActionListener() {  
             public void actionPerformed(ActionEvent e) {  
                 if (!isConnected) {  
-                    JOptionPane.showMessageDialog(frame, "已处于断开状态，不要重复断开!",  
-                            "错误", JOptionPane.ERROR_MESSAGE);  
+                    JOptionPane.showMessageDialog(null, "已斷開魂結，勿重複斷開!",  
+                            "Error", JOptionPane.ERROR_MESSAGE);  
                     return;  
                 }  
                 try {  
                     boolean flag = closeConnection();// 断开连接  
                     if (flag == false) {  
-                        throw new Exception("断开连接发生异常！");  
+                        throw new Exception("無法斷開魂結！");  
                     }  
-                    JOptionPane.showMessageDialog(frame, "成功断开!");  
+                    JOptionPane.showMessageDialog(null, "你下線囉!" , "通知" , JOptionPane.PLAIN_MESSAGE);  
                 } catch (Exception exc) {  
                     JOptionPane.showMessageDialog(frame, exc.getMessage(),  
-                            "错误", JOptionPane.ERROR_MESSAGE);  
+                            "Error", JOptionPane.ERROR_MESSAGE);  
                 }  
             }  
         });  
@@ -229,8 +231,8 @@ public class Client{
         btn_room.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (!isConnected) {
-                    JOptionPane.showMessageDialog(frame, "尚未連線!",  
-                            "錯誤", JOptionPane.ERROR_MESSAGE);  
+                    JOptionPane.showMessageDialog(null, "尚未連線!",  
+                            "Error", JOptionPane.ERROR_MESSAGE);  
                 }
                 else {
                     new ChatRoom(txt_roomId.getText());
@@ -271,8 +273,8 @@ public class Client{
             isConnected = true;// 已经连接上了  
             return true;  
         } catch (Exception e) {  
-            textArea.append("与端口号为：" + port + "    IP地址为：" + hostIp  
-                    + "   的服务器连接失败!" + "\r\n");  
+            textArea.append("port：" + port + "    IP：" + hostIp  
+                    + "   的伺服器連線失敗QQ" + "\r\n");  
             isConnected = false;// 未连接上  
             return false;  
         }  
@@ -353,7 +355,7 @@ public class Client{
                     String command = stringTokenizer.nextToken();// 命令  
                     if (command.equals("CLOSE"))// 服务器已关闭命令  
                     {  
-                        textArea.append("服务器已关闭!\r\n");  
+                        textArea.append("伺服器維修關閉!\r\n");  
                         closeCon();// 被动的关闭连接  
                         return;// 结束线程  
                     } else if (command.equals("ADD")) {// 有用户上线更新在线列表  
@@ -386,7 +388,7 @@ public class Client{
                         textArea.append(stringTokenizer.nextToken()  
                                 + stringTokenizer.nextToken() + "\r\n");  
                         closeCon();// 被动的关闭连接  
-                        JOptionPane.showMessageDialog(frame, "服务器缓冲区已满！", "错误",  
+                        JOptionPane.showMessageDialog(null, "上線人數過多，請稍後再嘗試！", "Error",  
                                 JOptionPane.ERROR_MESSAGE);  
                         return;// 结束线程  
                     } else {// 普通消息  
