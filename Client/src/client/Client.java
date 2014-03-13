@@ -298,7 +298,7 @@ public class Client{
     @SuppressWarnings("deprecation")  
     public synchronized boolean closeConnection() {  
         try {  
-            sendMessage("CLOSE@");// 发送断开连接命令给服务器  
+            sendMessage("CLOSE");// 发送断开连接命令给服务器  
             messageThread.stop();// 停止接受消息线程  
             // 释放资源  
             if (reader != null) {  

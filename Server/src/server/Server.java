@@ -409,7 +409,7 @@ public class Server {
                 try {  
                     message = reader.readLine();// 接收客户端消息
                     StringTokenizer stringTokenizer = new StringTokenizer(  
-                            message, "@");
+                            message, "@");  
                     String command = stringTokenizer.nextToken();// 命令
                     if (command.equals("CLOSE"))// 下线命令  
                     {
