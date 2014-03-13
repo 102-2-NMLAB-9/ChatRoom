@@ -266,18 +266,18 @@ public class Server {
     // 关闭服务器  
     public void closeServer() {  
         try {  
-            if (serverThread != null)  
+            if (serverThread != null) {  
                 serverThread.stop();// 停止服务器线程  
-  
+            }  
             for (int i = clients.size() - 1; i >= 0; i--) {  
                 // 给所有在线用户发送关闭命令  
-                clients.get(i).getWriter().println("伺服器維修關閉");  
+                clients.get(i).getWriter().println("CLOSE");  
                 clients.get(i).getWriter().flush();  
                 // 释放资源  
-                clients.get(i).stop();// 停止此条为客户端服务的线程  
                 clients.get(i).reader.close();  
                 clients.get(i).writer.close();  
                 clients.get(i).socket.close();  
+                clients.get(i).stop();// 停止此条为客户端服务的线程  
                 clients.remove(i);  
             }  
             if (serverSocket != null) {  
@@ -308,15 +308,14 @@ public class Server {
         // 服务器线程的构造方法  
         public ServerThread(ServerSocket serverSocket, int max) {  
             this.serverSocket = serverSocket;  
-            this.max = max;  
+            this.max = max+1;  
         }  
   
         public void run() {  
             while (true) {// 不停的等待客户端的链接  
-                try {  
-                    Socket socket = serverSocket.accept();  
-                    if (clients.size() == max) {// 如果已达人数上限  
-                        BufferedReader r = new BufferedReader(  
+                try {   
+                    if (clients.size() == max-1) {// 如果已达人数上限  
+                        /*BufferedReader r = new BufferedReader(  
                                 new InputStreamReader(socket.getInputStream()));  
                         PrintWriter w = new PrintWriter(socket  
                                 .getOutputStream());  
@@ -325,21 +324,23 @@ public class Server {
                         StringTokenizer st = new StringTokenizer(inf, "@");  
                         User user = new User(st.nextToken(), st.nextToken());  
                         // 反馈连接成功信息  
-                        w.println("MAX@服务器：对不起，" + user.getName()  
-                                + user.getIp() + "，服务器在线人数已达上限，请稍后尝试连接！");  
+                        w.println("伺服器表示：對不起，" + user.getName()  
+                                + user.getIp() + "，伺服器已爆滿，請稍候再嘗試連線！");  
                         w.flush();  
                         // 释放资源  
                         r.close();  
                         w.close();  
-                        socket.close();  
-                        continue;  
+                        socket.close();   */
                     }  
+                    else{
+                    Socket socket = serverSocket.accept(); 
                     ClientThread client = new ClientThread(socket);  
                     client.start();// 开启对此客户端服务的线程  
                     clients.add(client);  
                     listModel.addElement(client.getUser().getName());// 更新在线列表  
                     contentArea.append(client.getUser().getName()  
-                            + client.getUser().getIp() + "上线!\r\n");  
+                            + client.getUser().getIp() + "上線!\r\n");  
+                    }
                 } catch (IOException e) {  
                     e.printStackTrace();  
                 }  
@@ -402,7 +403,6 @@ public class Server {
             }  
         }  
   
-        @SuppressWarnings("deprecation")  
         public void run() {// 不断接收客户端的消息，进行处理。  
             String message = null;  
             while (true) {  
