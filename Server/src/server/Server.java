@@ -308,14 +308,15 @@ public class Server {
         // 服务器线程的构造方法  
         public ServerThread(ServerSocket serverSocket, int max) {  
             this.serverSocket = serverSocket;  
-            this.max = max+1;  
+            this.max = max;  
         }  
   
         public void run() {  
             while (true) {// 不停的等待客户端的链接  
                 try {   
-                    if (clients.size() == max-1) {// 如果已达人数上限  
-                        /*BufferedReader r = new BufferedReader(  
+                    Socket socket = serverSocket.accept(); 
+                    if (clients.size() == max) {// 如果已达人数上限  
+                        BufferedReader r = new BufferedReader(  
                                 new InputStreamReader(socket.getInputStream()));  
                         PrintWriter w = new PrintWriter(socket  
                                 .getOutputStream());  
@@ -330,10 +331,9 @@ public class Server {
                         // 释放资源  
                         r.close();  
                         w.close();  
-                        socket.close();   */
+                        socket.close();   
                     }  
-                    else{
-                    Socket socket = serverSocket.accept(); 
+                    else {
                     ClientThread client = new ClientThread(socket);  
                     client.start();// 开启对此客户端服务的线程  
                     clients.add(client);  
@@ -379,7 +379,7 @@ public class Server {
                 StringTokenizer st = new StringTokenizer(inf, "@");  
                 user = new User(st.nextToken(), st.nextToken());  
                 // 反馈连接成功信息  
-                writer.println(user.getName() + user.getIp() + "与服务器连接成功!");  
+                writer.println(user.getName() + user.getIp() + "連線成功!");  
                 writer.flush();  
                 // 反馈当前在线用户信息  
                 if (clients.size() > 0) {  
@@ -411,7 +411,7 @@ public class Server {
                     if (message.equals("CLOSE"))// 下线命令  
                     {  
                         contentArea.append(this.getUser().getName()  
-                                + this.getUser().getIp() + "下线!\r\n");  
+                                + this.getUser().getIp() + "下線!\r\n");  
                         // 断开连接释放资源  
                         reader.close();  
                         writer.close();  
@@ -450,11 +450,11 @@ public class Server {
             String source = stringTokenizer.nextToken();  
             String owner = stringTokenizer.nextToken();  
             String content = stringTokenizer.nextToken();  
-            message = source + "说：" + content;  
+            message = source + "說：" + content;  
             contentArea.append(message + "\r\n");  
             if (owner.equals("ALL")) {// 群发  
                 for (int i = clients.size() - 1; i >= 0; i--) {  
-                    clients.get(i).getWriter().println(message + "(多人发送)");  
+                    clients.get(i).getWriter().println(message);  
                     clients.get(i).getWriter().flush();  
                 }  
             }  
