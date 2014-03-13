@@ -24,6 +24,7 @@ import java.net.Socket;
 import java.util.HashMap;  
 import java.util.Map;  
 import java.util.StringTokenizer;  
+import java.util.ArrayList; 
   
 import javax.swing.DefaultListModel;  
 import javax.swing.JButton;  
@@ -70,6 +71,7 @@ public class Client{
     private BufferedReader reader;  
     private MessageThread messageThread;// 负责接收消息的线程  
     private Map<String, User> onLineUsers = new HashMap<String, User>();// 所有在线用户
+    private ArrayList<ChatRoom> chatRooms = new ArrayList<ChatRoom>();
   
     // 主方法,程序入口  
     public static void main(String[] args) {  
@@ -246,7 +248,7 @@ public class Client{
                             "Error", JOptionPane.ERROR_MESSAGE);  
                 }
                 else {
-                    new ChatRoom(txt_roomId.getText());
+                    sendMessage("ADDROOM@" + txt_roomId.getText()); 
                 }
             }
         });
@@ -307,7 +309,7 @@ public class Client{
     @SuppressWarnings("deprecation")  
     public synchronized boolean closeConnection() {  
         try {  
-            sendMessage("CLOSE");// 发送断开连接命令给服务器  
+            sendMessage("CLOSE@");// 发送断开连接命令给服务器  
             messageThread.stop();// 停止接受消息线程  
             // 释放资源  
             if (reader != null) {  
@@ -402,7 +404,13 @@ public class Client{
                         JOptionPane.showMessageDialog(null, "上線人數過多，請稍後再嘗試！", "Error",  
                                 JOptionPane.ERROR_MESSAGE);  
                         return;// 结束线程  
-                    } else {// 普通消息  
+                    } else if (command.equals("ADDROOM")) {
+                        String roomId = stringTokenizer.nextToken();  
+                        ChatRoom temp = new ChatRoom(roomId);
+                        chatRooms.add(temp);  
+                        listmodel.addElement(roomId); 
+                    }
+                    else {// 普通消息  
                         textArea.append(message + "\r\n");  
                     }  
                 } catch (IOException e) {  
