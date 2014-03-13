@@ -233,7 +233,7 @@ public class Client{
                             "錯誤", JOptionPane.ERROR_MESSAGE);  
                 }
                 else {
-                    new ChatRoom(frame, true, txt_roomId.getText());
+                    new ChatRoom(txt_roomId.getText());
                 }
             }
         });
