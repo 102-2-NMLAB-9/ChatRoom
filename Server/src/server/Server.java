@@ -128,20 +128,19 @@ public class Server {
         westPanel.add(leftPanel, "Center");
   
         rightPanel = new JScrollPane(contentArea);  
-        rightPanel.setBorder(new TitledBorder("消息显示区"));  
+        rightPanel.setBorder(new TitledBorder("訊息區"));  
   
         centerSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westPanel,  
                 rightPanel);  
-        centerSplit.setDividerLocation(100);  
-        northPanel = new JPanel();  
-        northPanel.setLayout(new GridLayout(1, 6));  
-        northPanel.add(new JLabel("人数上限"));  
+        centerSplit.setDividerLocation(150);  
+        northPanel = new JPanel(new GridLayout(1, 6));  
+        northPanel.add(new JLabel("                        人數上限"));  
         northPanel.add(txt_max);  
-        northPanel.add(new JLabel("端口"));  
+        northPanel.add(new JLabel("                                  port"));  
         northPanel.add(txt_port);  
         northPanel.add(btn_start);  
         northPanel.add(btn_stop);  
-        northPanel.setBorder(new TitledBorder("配置信息"));  
+        northPanel.setBorder(new TitledBorder("配置設定"));  
   
         frame.setLayout(new BorderLayout());  
         frame.add(northPanel, "North");  
@@ -151,8 +150,7 @@ public class Server {
         //frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());//设置全屏  
         int screen_width = Toolkit.getDefaultToolkit().getScreenSize().width;  
         int screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;  
-        frame.setLocation((screen_width - frame.getWidth()) / 2,  
-                (screen_height - frame.getHeight()) / 2);  
+        frame.setLocation((screen_width - frame.getWidth()) / 2,  (screen_height - frame.getHeight()) / 2);  
         frame.setVisible(true);  
   
         // 关闭窗口时事件  
@@ -183,8 +181,8 @@ public class Server {
         btn_start.addActionListener(new ActionListener() {  
             public void actionPerformed(ActionEvent e) {  
                 if (isStart) {  
-                    JOptionPane.showMessageDialog(frame, "服务器已处于启动状态，不要重复启动！",  
-                            "错误", JOptionPane.ERROR_MESSAGE);  
+                    JOptionPane.showMessageDialog(frame, "伺服器早已啟動！",  
+                            "Error", JOptionPane.ERROR_MESSAGE);  
                     return;  
                 }  
                 int max;  
@@ -193,30 +191,31 @@ public class Server {
                     try {  
                         max = Integer.parseInt(txt_max.getText());  
                     } catch (Exception e1) {  
-                        throw new Exception("人数上限为正整数！");  
+                        throw new Exception("人數上限請輸入正整數！");  
                     }  
                     if (max <= 0) {  
-                        throw new Exception("人数上限为正整数！");  
+                        throw new Exception("人數上限請輸入正整數！");  
                     }  
                     try {  
                         port = Integer.parseInt(txt_port.getText());  
                     } catch (Exception e1) {  
-                        throw new Exception("端口号为正整数！");  
+                        throw new Exception("port請輸入正整數！");  
                     }  
                     if (port <= 0) {  
-                        throw new Exception("端口号 为正整数！");  
+                        throw new Exception("port請輸入正整數！");  
                     }  
                     serverStart(max, port);  
-                    contentArea.append("服务器已成功启动!人数上限：" + max + ",端口：" + port  
+                    contentArea.append("伺服器成功啟動!  人數上限:" + max + " ,port:" + port  
                             + "\r\n");  
-                    JOptionPane.showMessageDialog(frame, "服务器成功启动!");  
+                  JOptionPane.showMessageDialog(null, "伺服器成功啟動!", "恭喜",  
+                    JOptionPane.PLAIN_MESSAGE);
                     btn_start.setEnabled(false);  
                     txt_max.setEnabled(false);  
                     txt_port.setEnabled(false);  
                     btn_stop.setEnabled(true);  
                 } catch (Exception exc) {  
-                    JOptionPane.showMessageDialog(frame, exc.getMessage(),  
-                            "错误", JOptionPane.ERROR_MESSAGE);  
+                    JOptionPane.showMessageDialog(null, exc.getMessage(),  
+                            "Error", JOptionPane.ERROR_MESSAGE);  
                 }  
             }  
         });  
@@ -225,7 +224,7 @@ public class Server {
         btn_stop.addActionListener(new ActionListener() {  
             public void actionPerformed(ActionEvent e) {  
                 if (!isStart) {  
-                    JOptionPane.showMessageDialog(frame, "服务器还未启动，无需停止！", "错误",  
+                    JOptionPane.showMessageDialog(null, "伺服器尚未啟動！", "Error",  
                             JOptionPane.ERROR_MESSAGE);  
                     return;  
                 }  
@@ -235,10 +234,11 @@ public class Server {
                     txt_max.setEnabled(true);  
                     txt_port.setEnabled(true);  
                     btn_stop.setEnabled(false);  
-                    contentArea.append("服务器成功停止!\r\n");  
-                    JOptionPane.showMessageDialog(frame, "服务器成功停止！");  
+                    contentArea.append("伺服器關閉!\r\n");  
+                    JOptionPane.showMessageDialog(null, "伺服器關閉!", "通知",  
+                    JOptionPane.PLAIN_MESSAGE);
                 } catch (Exception exc) {  
-                    JOptionPane.showMessageDialog(frame, "停止服务器发生异常！", "错误",  
+                    JOptionPane.showMessageDialog(null, "無法終止伺服器！", "Error",  
                             JOptionPane.ERROR_MESSAGE);  
                 }  
             }  
@@ -255,16 +255,15 @@ public class Server {
             isStart = true;  
         } catch (BindException e) {  
             isStart = false;  
-            throw new BindException("端口号已被占用，请换一个！");  
+            throw new BindException("此port已被佔用，請換一個！");  
         } catch (Exception e1) {  
             e1.printStackTrace();  
             isStart = false;  
-            throw new BindException("启动服务器异常！");  
+            throw new BindException("啟動伺服器失敗");  
         }  
     }  
   
     // 关闭服务器  
-    @SuppressWarnings("deprecation")  
     public void closeServer() {  
         try {  
             if (serverThread != null)  
@@ -272,7 +271,7 @@ public class Server {
   
             for (int i = clients.size() - 1; i >= 0; i--) {  
                 // 给所有在线用户发送关闭命令  
-                clients.get(i).getWriter().println("CLOSE");  
+                clients.get(i).getWriter().println("伺服器維修關閉");  
                 clients.get(i).getWriter().flush();  
                 // 释放资源  
                 clients.get(i).stop();// 停止此条为客户端服务的线程  
@@ -285,6 +284,7 @@ public class Server {
                 serverSocket.close();// 关闭服务器端连接  
             }  
             listModel.removeAllElements();// 清空用户列表  
+            listmodel.removeAllElements();
             isStart = false;  
         } catch (IOException e) {  
             e.printStackTrace();  
@@ -295,7 +295,7 @@ public class Server {
     // 群发服务器消息  
     public void sendServerMessage(String message) {  
         for (int i = clients.size() - 1; i >= 0; i--) {  
-            clients.get(i).getWriter().println("服务器：" + message + "(多人发送)");  
+            clients.get(i).getWriter().println("伺服器公告：" + message + "(廣播)");  
             clients.get(i).getWriter().flush();  
         }  
     }  
