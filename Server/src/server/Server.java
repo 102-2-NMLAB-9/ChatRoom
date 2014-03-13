@@ -311,40 +311,62 @@ public class Server {
             this.max = max;  
         }  
   
-        public void run() {  
+        public void run() {
             while (true) {// 不停的等待客户端的链接  
-                try {   
-                    Socket socket = serverSocket.accept(); 
+                try {
+                    Socket socket = serverSocket.accept();
+                    BufferedReader r = new BufferedReader(
+                            new InputStreamReader(socket.getInputStream()));
+                    PrintWriter w;
+                    w = new PrintWriter(socket.getOutputStream());
+                    String inf = r.readLine();  
+
+                    System.out.println(inf);
+                    
+                    StringTokenizer st = new StringTokenizer(inf, "@");  
+                    User user = new User(st.nextToken(), st.nextToken());
+                    boolean NameCollision = false;
+
+                    for(int i=clients.size()-1; i>=0; --i) {
+                        if(user.getName().equals(clients.get(i).getUser().getName()) ) {
+                            NameCollision = true; break;
+                        }
+                    }
+                    if(NameCollision) {
+                        w.println("MAX@伺服器表示：對不起，" + user.getName()  
+                                + user.getIp() + "，您的名稱已有人使用，請換個沒人使用的！");
+                        w.flush();
+                        r.close();
+                        w.close();
+                        socket.close();
+                        continue;
+                    }
+
                     if (clients.size() == max) {// 如果已达人数上限  
-                        BufferedReader r = new BufferedReader(  
-                                new InputStreamReader(socket.getInputStream()));  
-                        PrintWriter w = new PrintWriter(socket  
-                                .getOutputStream());  
                         // 接收客户端的基本用户信息  
-                        String inf = r.readLine();  
+/*                        String inf = r.readLine();  
                         StringTokenizer st = new StringTokenizer(inf, "@");  
-                        User user = new User(st.nextToken(), st.nextToken());  
-                        // 反馈连接成功信息  
+                        user = new User(st.nextToken(), st.nextToken());
+*/                        // 反馈连接成功信息  
                         w.println("MAX@伺服器表示：對不起，" + user.getName()  
                                 + user.getIp() + "，伺服器已爆滿，請稍候再嘗試連線！");  
                         w.flush();  
-                        // 释放资源  
+                        // 释放资源   
                         r.close();  
-                        w.close();  
+                        w.close(); 
                         socket.close();   
-                    }  
-                    else {
-                    ClientThread client = new ClientThread(socket);  
-                    client.start();// 开启对此客户端服务的线程  
-                    clients.add(client);  
-                    listModel.addElement(client.getUser().getName());// 更新在线列表  
-                    contentArea.append(client.getUser().getName()  
-                            + client.getUser().getIp() + "上線!\r\n");  
+                    }else {
+                        ClientThread client = new ClientThread(socket, user);  
+                        client.start();// 开启对此客户端服务的线程  
+                        clients.add(client);  
+                        listModel.addElement(client.getUser().getName());// 更新在线列表  
+                        contentArea.append(client.getUser().getName()  
+                                + client.getUser().getIp() + "上線!\r\n");  
                     }
                 } catch (IOException e) {  
                     e.printStackTrace();  
                 }  
-            }  
+            }
         }  
     }  
   
@@ -368,17 +390,18 @@ public class Server {
         }  
   
         // 客户端线程的构造方法  
-        public ClientThread(Socket socket) {  
-            try {  
+        public ClientThread(Socket socket, User usr) {  
+            try {
                 this.socket = socket;  
                 reader = new BufferedReader(new InputStreamReader(socket  
                         .getInputStream()));  
                 writer = new PrintWriter(socket.getOutputStream());  
                 // 接收客户端的基本用户信息  
-                String inf = reader.readLine();  
+/*                String inf = reader.readLine();  
                 StringTokenizer st = new StringTokenizer(inf, "@");  
                 user = new User(st.nextToken(), st.nextToken());  
-                // 反馈连接成功信息  
+*/                // 反馈连接成功信息  
+                this.user = usr;
                 writer.println(user.getName() + user.getIp() + "連線成功!");  
                 writer.flush();  
                 // 反馈当前在线用户信息  

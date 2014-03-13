@@ -256,7 +256,7 @@ public class Client{
      * @param hostIp  
      * @param name  
      */  
-    public boolean connectServer(int port, String hostIp, String name) {  
+    public boolean connectServer(int port, String hostIp, String name) {
         // 连接服务器  
         try {  
             socket = new Socket(hostIp, port);// 根据端口号和服务器ip建立连接  
