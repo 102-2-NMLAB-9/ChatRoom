@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.Map;  
 import java.util.StringTokenizer;  
 import java.util.ArrayList; 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
   
 import javax.swing.DefaultListModel;  
 import javax.swing.JButton;  
@@ -262,6 +265,24 @@ public class Client{
                 System.exit(0);// 退出程序  
             }  
         });  
+        roomList.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) 
+            {
+                JList theList = (JList) mouseEvent.getSource();
+                if (mouseEvent.getClickCount() == 2) 
+                {
+                    int index = theList.locationToIndex(mouseEvent.getPoint());
+                    if (index >= 0) 
+                    {
+                        Object o = theList.getModel().getElementAt(index);
+                        ChatRoom temp = new ChatRoom(o.toString());
+                        chatRooms.add(temp);
+                    }
+                }
+            }
+        });
     }  
   
     /**  
@@ -370,6 +391,8 @@ public class Client{
                     {  
                         textArea.append("伺服器維修關閉!\r\n");  
                         closeCon();// 被动的关闭连接  
+                        btn_start.setEnabled(true);
+                        btn_stop.setEnabled(true);
                         return;// 结束线程  
                     } else if (command.equals("ADD")) {// 有用户上线更新在线列表  
                         String username = "";  
@@ -410,7 +433,22 @@ public class Client{
                         chatRooms.add(temp);  
                         listmodel.addElement(roomId); 
                     }
-                    else {// 普通消息  
+                    else if (command.equals("ROOMLIST"))
+                    {                        
+                        int size = Integer  
+                        .parseInt(stringTokenizer.nextToken());  
+                        String roomId = null;    
+                        for (int i = 0; i < size; i++) {  
+                            roomId = stringTokenizer.nextToken();    
+                            ChatRoom temp = new ChatRoom(roomId);  
+                            roomList.add(temp);  
+                            listmodel.addElement(roomId); 
+                        
+                        }
+                    }
+                    else 
+                    {
+                        // 普通消息  
                         textArea.append(message + "\r\n");  
                     }  
                 } catch (IOException e) {  

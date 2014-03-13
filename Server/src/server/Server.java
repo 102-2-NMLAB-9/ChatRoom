@@ -387,10 +387,22 @@ public class Server {
                     for (int i = clients.size() - 1; i >= 0; i--) {  
                         temp += (clients.get(i).getUser().getName() + "/" + clients  
                                 .get(i).getUser().getIp())  
-                                + "@";  
+                                + "@";
                     }  
                     writer.println("USERLIST@" + clients.size() + "@" + temp);  
                     writer.flush();  
+                    for ( int i = clients.size() - 1; i >= 0; i-- )
+                    {
+                        String temp1 = "";
+                        User user = clients.get(i).getUser();
+                        ArrayList<String> roomId = user.getRoomId();
+                        for ( int j = roomId.size() - 1; i >= 0; i-- )
+                        {
+                            temp1 += ( roomId.get(j) + "@" );
+                        }
+                        writer.println("ROOMLIST@" + roomId.size() + "@" + temp1);
+                        writer.flush();
+                    }
                 }  
                 // 向所有在线用户发送该用户上线命令  
                 for (int i = clients.size() - 1; i >= 0; i--) {  
@@ -441,7 +453,7 @@ public class Server {
                     } 
                     else if (command.equals("ROOMLIST"))
                     {  
- 
+                        
                     }
                     else if (command.equals("ADDROOM"))//加房間
                     {
