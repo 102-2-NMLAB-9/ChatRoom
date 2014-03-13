@@ -104,7 +104,8 @@ public class Client{
         txt_name = new JTextField("xiaoqiang");
         txt_roomId = new JTextField("lalala");
         btn_start = new JButton("連線");  
-        btn_stop = new JButton("斷開");  
+        btn_stop = new JButton("斷開"); 
+        btn_stop.setEnabled(false);
         btn_send = new JButton("send");  
         btn_room = new JButton("開房間");
         listModel = new DefaultListModel();  
@@ -200,6 +201,11 @@ public class Client{
                         throw new Exception("連線失敗QQ");  
                     }  
                     frame.setTitle(name);  
+                    btn_start.setEnabled(false);  
+                    txt_name.setEnabled(false); 
+                    txt_port.setEnabled(false);
+                    txt_hostIp.setEnabled(false);
+                    btn_stop.setEnabled(true);  
                 } catch (Exception exc) {  
                     JOptionPane.showMessageDialog(null, exc.getMessage(),  
                             "Error", JOptionPane.ERROR_MESSAGE);  
@@ -220,7 +226,12 @@ public class Client{
                     if (flag == false) {  
                         throw new Exception("無法斷開魂結！");  
                     }  
-                    JOptionPane.showMessageDialog(null, "你下線囉!" , "通知" , JOptionPane.PLAIN_MESSAGE);  
+                    JOptionPane.showMessageDialog(null, "你下線囉!" , "通知" , JOptionPane.PLAIN_MESSAGE); 
+                    btn_start.setEnabled(true);  
+                    txt_name.setEnabled(true); 
+                    txt_port.setEnabled(true);
+                    txt_hostIp.setEnabled(true);
+                    btn_stop.setEnabled(false);  
                 } catch (Exception exc) {  
                     JOptionPane.showMessageDialog(frame, exc.getMessage(),  
                             "Error", JOptionPane.ERROR_MESSAGE);  
