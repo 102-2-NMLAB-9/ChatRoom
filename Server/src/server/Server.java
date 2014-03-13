@@ -267,7 +267,7 @@ public class Server {
     public void closeServer() {  
         try {  
             if (serverThread != null) {  
-                serverThread.stop();// 停止服务器线程  
+                serverThread.stop();// 停止服务器线程
             }  
             for (int i = clients.size() - 1; i >= 0; i--) {  
                 // 给所有在线用户发送关闭命令  
@@ -430,9 +430,12 @@ public class Server {
             String message = null;  
             while (true) {  
                 try {  
-                    message = reader.readLine();// 接收客户端消息  
-                    if (message.equals("CLOSE"))// 下线命令  
-                    {  
+                    message = reader.readLine();// 接收客户端消息
+                    StringTokenizer stringTokenizer = new StringTokenizer(  
+                            message, "@");  
+                    String command = stringTokenizer.nextToken();// 命令
+                    if (command.equals("CLOSE"))// 下线命令  
+                    {
                         contentArea.append(this.getUser().getName()  
                                 + this.getUser().getIp() + "下線!\r\n");  
                         // 断开连接释放资源  
@@ -458,7 +461,27 @@ public class Server {
                                 return;  
                             }  
                         }  
-                    } else {  
+                    } 
+                    else if (command.equals("ROOMLIST"))
+                    {  
+ 
+                    }
+                    else if (command.equals("ADDROOM"))//加房間
+                    {
+                        String roomId = stringTokenizer.nextToken();   
+                        listmodel.addElement(roomId); 
+                        for ( int i = clients.size() - 1; i >= 0; i-- )
+                        {
+                            clients.get(i).getWriter().println("ADDROOM@" + roomId);
+                            clients.get(i).getWriter().flush();
+                        }
+                    }
+                    else if (command.equals("DELETEROOM"))//刪房間
+                    {
+                        
+                    }
+                    else 
+                    {  
                         dispatcherMessage(message);// 转发消息  
                     }  
                 } catch (IOException e) {  
