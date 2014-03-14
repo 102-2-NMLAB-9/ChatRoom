@@ -202,12 +202,14 @@ public class Client{
                     if (flag == false) {  
                         throw new Exception("連線失敗QQ");  
                     }  
+                    else{
                     frame.setTitle(name);  
                     btn_start.setEnabled(false);  
                     txt_name.setEnabled(false); 
                     txt_port.setEnabled(false);
                     txt_hostIp.setEnabled(false);
                     btn_stop.setEnabled(true);  
+                    }
                 } catch (Exception exc) {  
                     JOptionPane.showMessageDialog(null, exc.getMessage(),  
                             "Error", JOptionPane.ERROR_MESSAGE);  
@@ -228,12 +230,14 @@ public class Client{
                     if (flag == false) {  
                         throw new Exception("無法斷開魂結！");  
                     }  
+                    else {
                     JOptionPane.showMessageDialog(null, "你下線囉!" , "通知" , JOptionPane.PLAIN_MESSAGE); 
                     btn_start.setEnabled(true);  
                     txt_name.setEnabled(true); 
                     txt_port.setEnabled(true);
                     txt_hostIp.setEnabled(true);
                     btn_stop.setEnabled(false);  
+                    }
                 } catch (Exception exc) {  
                     JOptionPane.showMessageDialog(frame, exc.getMessage(),  
                             "Error", JOptionPane.ERROR_MESSAGE);  
@@ -309,6 +313,7 @@ public class Client{
     @SuppressWarnings("deprecation")  
     public synchronized boolean closeConnection() {  
         try {  
+            listModel.removeAllElements();
             sendMessage("CLOSE@");// 发送断开连接命令给服务器  
             messageThread.stop();// 停止接受消息线程  
             // 释放资源  
@@ -370,6 +375,11 @@ public class Client{
                     {  
                         textArea.append("伺服器維修關閉!\r\n");  
                         closeCon();// 被动的关闭连接  
+                        btn_start.setEnabled(true);  
+                        txt_name.setEnabled(true); 
+                        txt_port.setEnabled(true);
+                        txt_hostIp.setEnabled(true);
+                        btn_stop.setEnabled(false);                          
                         return;// 结束线程  
                     } else if (command.equals("ADD")) {// 有用户上线更新在线列表  
                         String username = "";  
@@ -403,8 +413,25 @@ public class Client{
                         closeCon();// 被动的关闭连接  
                         JOptionPane.showMessageDialog(null, "上線人數過多，請稍後再嘗試！", "Error",  
                                 JOptionPane.ERROR_MESSAGE);  
+                        btn_start.setEnabled(true);  
+                        txt_name.setEnabled(true); 
+                        txt_port.setEnabled(true);
+                        txt_hostIp.setEnabled(true);
+                        btn_stop.setEnabled(false);  
                         return;// 结束线程  
-                    } else if (command.equals("ADDROOM")) {
+                    } else if (command.equals("USED")) {
+                        textArea.append(stringTokenizer.nextToken()  
+                                + stringTokenizer.nextToken() + "\r\n");  
+                        closeCon();// 被动的关闭连接  
+                        JOptionPane.showMessageDialog(null, "暱稱已有人使用，請換一個！", "Error",  
+                                JOptionPane.ERROR_MESSAGE);  
+                        btn_start.setEnabled(true);  
+                        txt_name.setEnabled(true); 
+                        txt_port.setEnabled(true);
+                        txt_hostIp.setEnabled(true);
+                        btn_stop.setEnabled(false);  
+                        return;// 结束线程                          
+                    }  else if (command.equals("ADDROOM")) {
                         String roomId = stringTokenizer.nextToken();  
                         ChatRoom temp = new ChatRoom(roomId);
                         chatRooms.add(temp);  

@@ -325,7 +325,7 @@ public class Server {
                         StringTokenizer st = new StringTokenizer(inf, "@");  
                         User user = new User(st.nextToken(), st.nextToken());  
                         // 反馈连接成功信息  
-                        w.println("MAX@伺服器表示：對不起，" + user.getName()  
+                        w.println("USED@伺服器表示：對不起，" + user.getName()  
                                 + user.getIp() + "，伺服器已爆滿，請稍候再嘗試連線！");  
                         w.flush();  
                         // 释放资源  
