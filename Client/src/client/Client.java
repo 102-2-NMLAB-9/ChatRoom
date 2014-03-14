@@ -251,6 +251,7 @@ public class Client{
                             "Error", JOptionPane.ERROR_MESSAGE);  
                 }
                 else {
+                    ChatRoom temp = new ChatRoom(txt_roomId.getText());
                     sendMessage("ADDROOM@" + txt_roomId.getText()); 
                 }
             }
@@ -430,6 +431,7 @@ public class Client{
                     } else if (command.equals("ADDROOM")) {
                         String roomId = stringTokenizer.nextToken();  
                         ChatRoom temp = new ChatRoom(roomId);
+                        temp.setVisible(false);
                         chatRooms.add(temp);  
                         listmodel.addElement(roomId); 
                     }
@@ -440,8 +442,9 @@ public class Client{
                         String roomId = null;    
                         for (int i = 0; i < size; i++) {  
                             roomId = stringTokenizer.nextToken();    
-                            ChatRoom temp = new ChatRoom(roomId);  
-                            roomList.add(temp);  
+                            ChatRoom temp = new ChatRoom(roomId);
+                            temp.setVisible(false);
+                            chatRooms.add(temp);  
                             listmodel.addElement(roomId); 
                         
                         }

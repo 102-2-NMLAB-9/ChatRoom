@@ -61,7 +61,8 @@ public class Server {
   
     private ServerSocket serverSocket;  
     private ServerThread serverThread;  
-    private ArrayList<ClientThread> clients;  
+    private ArrayList<ClientThread> clients;
+    private ArrayList<String> RoomList; 
   
     private boolean isStart = false;  
   
@@ -248,7 +249,8 @@ public class Server {
     // 启动服务器  
     public void serverStart(int max, int port) throws java.net.BindException {  
         try {  
-            clients = new ArrayList<ClientThread>();  
+            clients = new ArrayList<ClientThread>(); 
+            RoomList = new ArrayList<String>();
             serverSocket = new ServerSocket(port);  
             serverThread = new ServerThread(serverSocket, max);  
             serverThread.start();  
@@ -414,18 +416,13 @@ public class Server {
                     }  
                     writer.println("USERLIST@" + clients.size() + "@" + temp);  
                     writer.flush();  
-                    /*for ( int i = clients.size() - 1; i >= 0; i-- )
+                    String temp1 = "";
+                    for ( int i = RoomList.size() - 1; i >= 0; i-- )
                     {
-                        String temp1 = "";
-                        User user = clients.get(i).getUser();
-                        ArrayList<String> roomId = user.getRoomId();
-                        for ( int j = roomId.size() - 1; i >= 0; i-- )
-                        {
-                            temp1 += ( roomId.get(j) + "@" );
-                        }
-                        writer.println("ROOMLIST@" + roomId.size() + "@" + temp1);
-                        writer.flush();
-                    }*/
+                        temp1 += ( RoomList.get(i) + "@" );
+                    }
+                    writer.println("ROOMLIST@" + RoomList.size() + "@" + temp1);
+                    writer.flush();
                 }  
                 // 向所有在线用户发送该用户上线命令  
                 for (int i = clients.size() - 1; i >= 0; i--) {  
@@ -474,14 +471,11 @@ public class Server {
                             }  
                         }  
                     } 
-                    else if (command.equals("ROOMLIST"))
-                    {  
-                        
-                    }
                     else if (command.equals("ADDROOM"))//加房間
                     {
                         String roomId = stringTokenizer.nextToken();   
                         listmodel.addElement(roomId); 
+                        RoomList.add(roomId);
                         for ( int i = clients.size() - 1; i >= 0; i-- )
                         {
                             clients.get(i).getWriter().println("ADDROOM@" + roomId);
