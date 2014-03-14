@@ -61,7 +61,8 @@ public class Server {
   
     private ServerSocket serverSocket;  
     private ServerThread serverThread;  
-    private ArrayList<ClientThread> clients;  
+    private ArrayList<ClientThread> clients;
+    private ArrayList<String> RoomList; 
   
     private boolean isStart = false;  
   
@@ -248,7 +249,8 @@ public class Server {
     // 启动服务器  
     public void serverStart(int max, int port) throws java.net.BindException {  
         try {  
-            clients = new ArrayList<ClientThread>();  
+            clients = new ArrayList<ClientThread>(); 
+            RoomList = new ArrayList<String>();
             serverSocket = new ServerSocket(port);  
             serverThread = new ServerThread(serverSocket, max);  
             serverThread.start();  
@@ -311,40 +313,66 @@ public class Server {
             this.max = max;  
         }  
   
-        public void run() {  
+        public void run() {
             while (true) {// 不停的等待客户端的链接  
-                try {   
-                    Socket socket = serverSocket.accept(); 
+                try {
+                    Socket socket = serverSocket.accept();
+                    BufferedReader r = new BufferedReader(
+                            new InputStreamReader(socket.getInputStream()));
+                    PrintWriter w;
+                    w = new PrintWriter(socket.getOutputStream());
+                    String inf = r.readLine();  
+
+                    System.out.println(inf);
+                    
+                    StringTokenizer st = new StringTokenizer(inf, "@");  
+                    User user = new User(st.nextToken(), st.nextToken());
+                    boolean NameCollision = false;
+
+                    for(int i=clients.size()-1; i>=0; --i) {
+                        if(user.getName().equals(clients.get(i).getUser().getName()) ) {
+                            NameCollision = true; break;
+                        }
+                    }
+                    if(NameCollision) {
+                        w.println("USED@伺服器表示：對不起，" + user.getName()  
+                                + user.getIp() + "，暱稱已重複，請換一個！");
+                        w.flush();
+                        r.close();
+                        w.close();
+                        socket.close();
+                        continue;
+                    }
+
                     if (clients.size() == max) {// 如果已达人数上限  
-                        BufferedReader r = new BufferedReader(  
-                                new InputStreamReader(socket.getInputStream()));  
-                        PrintWriter w = new PrintWriter(socket  
-                                .getOutputStream());  
                         // 接收客户端的基本用户信息  
-                        String inf = r.readLine();  
+/*                        String inf = r.readLine();  
                         StringTokenizer st = new StringTokenizer(inf, "@");  
+
                         User user = new User(st.nextToken(), st.nextToken());  
                         // 反馈连接成功信息  
-                        w.println("USED@伺服器表示：對不起，" + user.getName()  
+
+                        user = new User(st.nextToken(), st.nextToken());
+*/                        // 反馈连接成功信息  
+                        w.println("MAX@伺服器表示：對不起，" + user.getName()  
                                 + user.getIp() + "，伺服器已爆滿，請稍候再嘗試連線！");  
                         w.flush();  
-                        // 释放资源  
+                        // 释放资源   
                         r.close();  
-                        w.close();  
+                        w.close(); 
                         socket.close();   
-                    }  
-                    else {
-                    ClientThread client = new ClientThread(socket);  
-                    client.start();// 开启对此客户端服务的线程  
-                    clients.add(client);  
-                    listModel.addElement(client.getUser().getName());// 更新在线列表  
-                    contentArea.append(client.getUser().getName()  
-                            + client.getUser().getIp() + "上線!\r\n");  
+                    }else {
+                        ClientThread client = new ClientThread(socket, user);  
+                        client.start();// 开启对此客户端服务的线程  
+                        clients.add(client);  
+                        listModel.addElement(client.getUser().getName());// 更新在线列表  
+                        contentArea.append(client.getUser().getName()  
+                                + client.getUser().getIp() + "上線!\r\n");  
                     }
                 } catch (IOException e) {  
                     e.printStackTrace();  
                 }  
-            }  
+            }
         }  
     }  
   
@@ -368,17 +396,18 @@ public class Server {
         }  
   
         // 客户端线程的构造方法  
-        public ClientThread(Socket socket) {  
-            try {  
+        public ClientThread(Socket socket, User usr) {  
+            try {
                 this.socket = socket;  
                 reader = new BufferedReader(new InputStreamReader(socket  
                         .getInputStream()));  
                 writer = new PrintWriter(socket.getOutputStream());  
                 // 接收客户端的基本用户信息  
-                String inf = reader.readLine();  
+/*                String inf = reader.readLine();  
                 StringTokenizer st = new StringTokenizer(inf, "@");  
                 user = new User(st.nextToken(), st.nextToken());  
-                // 反馈连接成功信息  
+*/                // 反馈连接成功信息  
+                this.user = usr;
                 writer.println(user.getName() + user.getIp() + "連線成功!");  
                 writer.flush();  
                 // 反馈当前在线用户信息  
@@ -387,10 +416,17 @@ public class Server {
                     for (int i = clients.size() - 1; i >= 0; i--) {  
                         temp += (clients.get(i).getUser().getName() + "/" + clients  
                                 .get(i).getUser().getIp())  
-                                + "@";  
+                                + "@";
                     }  
                     writer.println("USERLIST@" + clients.size() + "@" + temp);  
                     writer.flush();  
+                    String temp1 = "";
+                    for ( int i = RoomList.size() - 1; i >= 0; i-- )
+                    {
+                        temp1 += ( RoomList.get(i) + "@" );
+                    }
+                    writer.println("ROOMLIST@" + RoomList.size() + "@" + temp1);
+                    writer.flush();
                 }  
                 // 向所有在线用户发送该用户上线命令  
                 for (int i = clients.size() - 1; i >= 0; i--) {  
@@ -409,7 +445,7 @@ public class Server {
                 try {  
                     message = reader.readLine();// 接收客户端消息
                     StringTokenizer stringTokenizer = new StringTokenizer(  
-                            message, "@");
+                            message, "@");  
                     String command = stringTokenizer.nextToken();// 命令
                     if (command.equals("CLOSE"))// 下线命令  
                     {
@@ -439,14 +475,11 @@ public class Server {
                             }  
                         }  
                     } 
-                    else if (command.equals("ROOMLIST"))
-                    {  
- 
-                    }
                     else if (command.equals("ADDROOM"))//加房間
                     {
                         String roomId = stringTokenizer.nextToken();   
                         listmodel.addElement(roomId); 
+                        RoomList.add(roomId);
                         for ( int i = clients.size() - 1; i >= 0; i-- )
                         {
                             clients.get(i).getWriter().println("ADDROOM@" + roomId);

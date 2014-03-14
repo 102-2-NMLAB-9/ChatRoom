@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.Map;  
 import java.util.StringTokenizer;  
 import java.util.ArrayList; 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
   
 import javax.swing.DefaultListModel;  
 import javax.swing.JButton;  
@@ -252,6 +255,7 @@ public class Client{
                             "Error", JOptionPane.ERROR_MESSAGE);  
                 }
                 else {
+                    ChatRoom temp = new ChatRoom(txt_roomId.getText());
                     sendMessage("ADDROOM@" + txt_roomId.getText()); 
                 }
             }
@@ -266,6 +270,24 @@ public class Client{
                 System.exit(0);// 退出程序  
             }  
         });  
+        roomList.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) 
+            {
+                JList theList = (JList) mouseEvent.getSource();
+                if (mouseEvent.getClickCount() == 2) 
+                {
+                    int index = theList.locationToIndex(mouseEvent.getPoint());
+                    if (index >= 0) 
+                    {
+                        Object o = theList.getModel().getElementAt(index);
+                        ChatRoom temp = new ChatRoom(o.toString());
+                        chatRooms.add(temp);
+                    }
+                }
+            }
+        });
     }  
   
     /**  
@@ -275,7 +297,7 @@ public class Client{
      * @param hostIp  
      * @param name  
      */  
-    public boolean connectServer(int port, String hostIp, String name) {  
+    public boolean connectServer(int port, String hostIp, String name) {
         // 连接服务器  
         try {  
             socket = new Socket(hostIp, port);// 根据端口号和服务器ip建立连接  
@@ -313,8 +335,8 @@ public class Client{
     @SuppressWarnings("deprecation")  
     public synchronized boolean closeConnection() {  
         try {  
-            listModel.removeAllElements();
-            sendMessage("CLOSE@");// 发送断开连接命令给服务器  
+            listModel.removeAllElements(); 
+            sendMessage("CLOSE");// 发送断开连接命令给服务器 
             messageThread.stop();// 停止接受消息线程  
             // 释放资源  
             if (reader != null) {  
@@ -434,10 +456,27 @@ public class Client{
                     }  else if (command.equals("ADDROOM")) {
                         String roomId = stringTokenizer.nextToken();  
                         ChatRoom temp = new ChatRoom(roomId);
+                        temp.setVisible(false);
                         chatRooms.add(temp);  
                         listmodel.addElement(roomId); 
                     }
-                    else {// 普通消息  
+                    else if (command.equals("ROOMLIST"))
+                    {                        
+                        int size = Integer  
+                        .parseInt(stringTokenizer.nextToken());  
+                        String roomId = null;    
+                        for (int i = 0; i < size; i++) {  
+                            roomId = stringTokenizer.nextToken();    
+                            ChatRoom temp = new ChatRoom(roomId);
+                            temp.setVisible(false);
+                            chatRooms.add(temp);  
+                            listmodel.addElement(roomId); 
+                        
+                        }
+                    }
+                    else 
+                    {
+                        // 普通消息  
                         textArea.append(message + "\r\n");  
                     }  
                 } catch (IOException e) {  

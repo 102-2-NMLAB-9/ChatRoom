@@ -6,6 +6,8 @@
 
 package client;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author nmlab212
@@ -14,12 +16,11 @@ package client;
 public class User {
     private String name;  
     private String ip;  
-    private String roomId;
+    private ArrayList<String> roomId;
   
     public User(String name, String ip) {  
         this.name = name;  
         this.ip = ip;  
-        this.roomId = "";
     }  
   
     public String getName() {  
@@ -39,10 +40,10 @@ public class User {
     }  
     
     public void setRoomId(String roomId) {
-        this.roomId = roomId;
+        this.roomId.add(roomId);
     }
     
-    public String getRoomId() {
-        return roomId;
+    public ArrayList<String> getRoomId() {
+        return this.roomId;
     }
-} 
+}
