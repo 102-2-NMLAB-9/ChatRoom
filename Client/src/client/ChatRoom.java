@@ -14,14 +14,16 @@ import javax.swing.WindowConstants;
  */
 public class ChatRoom extends javax.swing.JFrame {
     private static String roomId;
+    private static Client client;
 
     /**
      * Creates new form ChatRoom
      */
-    public ChatRoom(String text) {
+    public ChatRoom(String text, Client client) {
         this.setTitle(text);
         initComponents();
         this.setVisible(true);
+        this.client = client;
     }
 
     /**
@@ -305,7 +307,7 @@ public class ChatRoom extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ChatRoom(roomId).setVisible(true);
+                new ChatRoom(roomId, client).setVisible(true);
             }
         });
     }

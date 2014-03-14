@@ -257,7 +257,7 @@ public class Client{
                     chatRoomQuestion question = new chatRoomQuestion(frame, true, client);
                     if ( size != chatRooms.size() )
                     {
-                        ChatRoom temp = new ChatRoom(chatRooms.get(chatRooms.size() - 1));
+                        ChatRoom temp = new ChatRoom(chatRooms.get(chatRooms.size() - 1), client);
                         sendMessage("ADDROOM@" + chatRooms.get(chatRooms.size() - 1));
                     }
                 }
@@ -286,7 +286,7 @@ public class Client{
                     {
                         Object o = theList.getModel().getElementAt(index);
                         chatRooms.add(o.toString());
-                        new ChatRoom(o.toString());
+                        new ChatRoom(o.toString(), client);
                     }
                 }
             }

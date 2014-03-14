@@ -1,0 +1,2 @@
+1. null exception in run.
+2. connection failed when used and max appear due to multiple thread.
