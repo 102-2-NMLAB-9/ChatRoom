@@ -52,7 +52,6 @@ public class Client{
     private JTextField txt_port;  
     private JTextField txt_hostIp;  
     private JTextField txt_name;  
-    private JTextField txt_roomId;
     private JButton btn_start;  
     private JButton btn_stop;  
     private JButton btn_send;  
@@ -74,7 +73,7 @@ public class Client{
     private BufferedReader reader;  
     private MessageThread messageThread;// 负责接收消息的线程  
     private Map<String, User> onLineUsers = new HashMap<String, User>();// 所有在线用户
-    private ArrayList<ChatRoom> chatRooms = new ArrayList<ChatRoom>();
+    private ArrayList<String> chatRooms = new ArrayList<String>();
   
     // 主方法,程序入口  
     public static void main(String[] args) {  
@@ -107,7 +106,6 @@ public class Client{
         txt_port = new JTextField("5566");  
         txt_hostIp = new JTextField("127.0.0.1");  
         txt_name = new JTextField("xiaoqiang");
-        txt_roomId = new JTextField("lalala");
         btn_start = new JButton("連線");  
         btn_stop = new JButton("斷開"); 
         btn_stop.setEnabled(false);
@@ -141,10 +139,9 @@ public class Client{
         westPanel.add(leftScroll, "Center");
         southPanel = new JPanel(new BorderLayout());   
         southPanel.add(btn_room, "West");
-        southPanel.add(txt_roomId, "North");
         southPanel.add(btn_send, "East");
         southPanel.add(textField, "Center"); 
-        southPanel.setBorder(new TitledBorder("開房間、發送消息"));  
+        southPanel.setBorder(new TitledBorder("對話框"));  
   
         centerSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westPanel,  
                 rightScroll);  
@@ -255,8 +252,8 @@ public class Client{
                             "Error", JOptionPane.ERROR_MESSAGE);  
                 }
                 else {
-                    ChatRoom temp = new ChatRoom(txt_roomId.getText());
-                    sendMessage("ADDROOM@" + txt_roomId.getText()); 
+                    ChatRoom temp = new ChatRoom("New Room");
+                    sendMessage("ADDROOM@" + "New Room"); 
                 }
             }
         });
@@ -282,8 +279,7 @@ public class Client{
                     if (index >= 0) 
                     {
                         Object o = theList.getModel().getElementAt(index);
-                        ChatRoom temp = new ChatRoom(o.toString());
-                        chatRooms.add(temp);
+                        chatRooms.add(o.toString());
                     }
                 }
             }
@@ -335,7 +331,10 @@ public class Client{
     @SuppressWarnings("deprecation")  
     public synchronized boolean closeConnection() {  
         try {  
-            listModel.removeAllElements(); 
+            listModel.removeAllElements();
+            listmodel.removeAllElements();
+            onLineUsers.clear();
+            chatRooms.clear();
             sendMessage("CLOSE");// 发送断开连接命令给服务器 
             messageThread.stop();// 停止接受消息线程  
             // 释放资源  
@@ -371,7 +370,10 @@ public class Client{
         // 被动的关闭连接  
         public synchronized void closeCon() throws Exception {  
             // 清空用户列表  
-            listModel.removeAllElements();  
+            listModel.removeAllElements();
+            listmodel.removeAllElements();
+            onLineUsers.clear();
+            chatRooms.clear();  
             // 被动的关闭连接释放资源  
             if (reader != null) {  
                 reader.close();  
@@ -455,9 +457,7 @@ public class Client{
                         return;// 结束线程                          
                     }  else if (command.equals("ADDROOM")) {
                         String roomId = stringTokenizer.nextToken();  
-                        ChatRoom temp = new ChatRoom(roomId);
-                        temp.setVisible(false);
-                        chatRooms.add(temp);  
+                        chatRooms.add(roomId);  
                         listmodel.addElement(roomId); 
                     }
                     else if (command.equals("ROOMLIST"))
@@ -467,9 +467,7 @@ public class Client{
                         String roomId = null;    
                         for (int i = 0; i < size; i++) {  
                             roomId = stringTokenizer.nextToken();    
-                            ChatRoom temp = new ChatRoom(roomId);
-                            temp.setVisible(false);
-                            chatRooms.add(temp);  
+                            chatRooms.add(roomId);  
                             listmodel.addElement(roomId); 
                         
                         }
