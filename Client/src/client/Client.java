@@ -280,6 +280,7 @@ public class Client{
                     {
                         Object o = theList.getModel().getElementAt(index);
                         chatRooms.add(o.toString());
+                        new ChatRoom(o.toString());
                     }
                 }
             }
