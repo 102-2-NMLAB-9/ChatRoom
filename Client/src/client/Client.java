@@ -43,7 +43,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;  
   
 public class Client{  
-  
+
+    private Client client;
     private JFrame frame;  
     private JList userList;
     private JList roomList;
@@ -73,11 +74,11 @@ public class Client{
     private BufferedReader reader;  
     private MessageThread messageThread;// 负责接收消息的线程  
     private Map<String, User> onLineUsers = new HashMap<String, User>();// 所有在线用户
-    private ArrayList<String> chatRooms = new ArrayList<String>();
+    public ArrayList<String> chatRooms = new ArrayList<String>();
   
     // 主方法,程序入口  
     public static void main(String[] args) {  
-        new Client();  
+        new Client();
     }  
   
     // 执行发送  
@@ -99,6 +100,7 @@ public class Client{
   
     // 构造方法  
     public Client() {
+        client = this;
         textArea = new JTextArea();  
         textArea.setEditable(false);  
         textArea.setForeground(Color.blue);  
@@ -244,7 +246,6 @@ public class Client{
                 }  
             }  
         });  
-        
         btn_room.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (!isConnected) {
@@ -252,8 +253,13 @@ public class Client{
                             "Error", JOptionPane.ERROR_MESSAGE);  
                 }
                 else {
-                    ChatRoom temp = new ChatRoom("New Room");
-                    sendMessage("ADDROOM@" + "New Room"); 
+                    int size = chatRooms.size();
+                    chatRoomQuestion question = new chatRoomQuestion(frame, true, client);
+                    if ( size != chatRooms.size() )
+                    {
+                        ChatRoom temp = new ChatRoom(chatRooms.get(chatRooms.size() - 1));
+                        sendMessage("ADDROOM@" + chatRooms.get(chatRooms.size() - 1));
+                    }
                 }
             }
         });
