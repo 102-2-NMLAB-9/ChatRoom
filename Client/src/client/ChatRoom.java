@@ -68,6 +68,7 @@ public class ChatRoom extends javax.swing.JFrame {
             }
         });
 
+        jList1.setBorder(javax.swing.BorderFactory.createTitledBorder("使用者列表"));
         jScrollPane4.setViewportView(jList1);
 
         jScrollPane3.setViewportView(jScrollPane4);
@@ -75,6 +76,7 @@ public class ChatRoom extends javax.swing.JFrame {
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
+        jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder("訊息欄"));
         jScrollPane6.setViewportView(jTextArea1);
 
         jScrollPane5.setViewportView(jScrollPane6);
@@ -146,6 +148,7 @@ public class ChatRoom extends javax.swing.JFrame {
 
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
+        jTextArea2.setBorder(javax.swing.BorderFactory.createTitledBorder("發送訊息"));
         jScrollPane8.setViewportView(jTextArea2);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -209,8 +212,8 @@ public class ChatRoom extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
-                    .addComponent(jScrollPane5))
+                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -342,6 +342,7 @@ public class Client{
             listmodel.removeAllElements();
             onLineUsers.clear();
             chatRooms.clear();
+            frame.setTitle("Client");
             sendMessage("CLOSE");// 发送断开连接命令给服务器 
             messageThread.stop();// 停止接受消息线程  
             // 释放资源  
@@ -380,7 +381,13 @@ public class Client{
             listModel.removeAllElements();
             listmodel.removeAllElements();
             onLineUsers.clear();
-            chatRooms.clear();  
+            chatRooms.clear(); 
+            btn_start.setEnabled(true);  
+            txt_name.setEnabled(true); 
+            txt_port.setEnabled(true);
+            txt_hostIp.setEnabled(true);
+            btn_stop.setEnabled(false);
+            frame.setTitle("Client");
             // 被动的关闭连接释放资源  
             if (reader != null) {  
                 reader.close();  
@@ -405,12 +412,7 @@ public class Client{
                     if (command.equals("CLOSE"))// 服务器已关闭命令  
                     {  
                         textArea.append("伺服器維修關閉!\r\n");  
-                        closeCon();// 被动的关闭连接  
-                        btn_start.setEnabled(true);  
-                        txt_name.setEnabled(true); 
-                        txt_port.setEnabled(true);
-                        txt_hostIp.setEnabled(true);
-                        btn_stop.setEnabled(false);                          
+                        closeCon();// 被动的关闭连接   
                         return;// 结束线程  
                     } else if (command.equals("ADD")) {// 有用户上线更新在线列表  
                         String username = "";  
@@ -444,11 +446,6 @@ public class Client{
                         closeCon();// 被动的关闭连接  
                         JOptionPane.showMessageDialog(null, "上線人數過多，請稍後再嘗試！", "Error",  
                                 JOptionPane.ERROR_MESSAGE);  
-                        btn_start.setEnabled(true);  
-                        txt_name.setEnabled(true); 
-                        txt_port.setEnabled(true);
-                        txt_hostIp.setEnabled(true);
-                        btn_stop.setEnabled(false);  
                         return;// 结束线程  
                     } else if (command.equals("USED")) {
                         textArea.append(stringTokenizer.nextToken()  
@@ -456,11 +453,6 @@ public class Client{
                         closeCon();// 被动的关闭连接  
                         JOptionPane.showMessageDialog(null, "暱稱已有人使用，請換一個！", "Error",  
                                 JOptionPane.ERROR_MESSAGE);  
-                        btn_start.setEnabled(true);  
-                        txt_name.setEnabled(true); 
-                        txt_port.setEnabled(true);
-                        txt_hostIp.setEnabled(true);
-                        btn_stop.setEnabled(false);  
                         return;// 结束线程                          
                     }  else if (command.equals("ADDROOM")) {
                         String roomId = stringTokenizer.nextToken();  

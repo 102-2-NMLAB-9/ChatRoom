@@ -208,7 +208,7 @@ public class Server {
                     serverStart(max, port);  
                     contentArea.append("伺服器成功啟動!  人數上限:" + max + " ,port:" + port  
                             + "\r\n");  
-                  JOptionPane.showMessageDialog(null, "伺服器成功啟動!", "恭喜",  
+                    JOptionPane.showMessageDialog(null, "伺服器成功啟動!", "恭喜",  
                     JOptionPane.PLAIN_MESSAGE);
                     btn_start.setEnabled(false);  
                     txt_max.setEnabled(false);  
