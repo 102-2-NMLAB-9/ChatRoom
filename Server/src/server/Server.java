@@ -414,7 +414,7 @@ public class Server {
                     }  
                     writer.println("USERLIST@" + clients.size() + "@" + temp);  
                     writer.flush();  
-                    for ( int i = clients.size() - 1; i >= 0; i-- )
+                    /*for ( int i = clients.size() - 1; i >= 0; i-- )
                     {
                         String temp1 = "";
                         User user = clients.get(i).getUser();
@@ -425,7 +425,7 @@ public class Server {
                         }
                         writer.println("ROOMLIST@" + roomId.size() + "@" + temp1);
                         writer.flush();
-                    }
+                    }*/
                 }  
                 // 向所有在线用户发送该用户上线命令  
                 for (int i = clients.size() - 1; i >= 0; i--) {  
