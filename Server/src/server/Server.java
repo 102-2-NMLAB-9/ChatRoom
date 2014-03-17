@@ -321,10 +321,7 @@ public class Server {
                             new InputStreamReader(socket.getInputStream()));
                     PrintWriter w;
                     w = new PrintWriter(socket.getOutputStream());
-                    String inf = r.readLine();  
-
-                    System.out.println(inf);
-                    
+                    String inf = r.readLine();                     
                     StringTokenizer st = new StringTokenizer(inf, "@");  
                     User user = new User(st.nextToken(), st.nextToken());
                     boolean NameCollision = false;

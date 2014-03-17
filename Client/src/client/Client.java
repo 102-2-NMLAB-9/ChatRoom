@@ -75,6 +75,7 @@ public class Client{
     private MessageThread messageThread;// 负责接收消息的线程  
     private Map<String, User> onLineUsers = new HashMap<String, User>();// 所有在线用户
     public ArrayList<String> chatRooms = new ArrayList<String>();
+    public ArrayList<ChatRoom> objChatRooms = new ArrayList<ChatRoom>();
   
     // 主方法,程序入口  
     public static void main(String[] args) {  
@@ -258,6 +259,7 @@ public class Client{
                     if ( size != chatRooms.size() )
                     {
                         ChatRoom temp = new ChatRoom(chatRooms.get(chatRooms.size() - 1), client);
+                        objChatRooms.add(temp);
                         sendMessage("ADDROOM@" + chatRooms.get(chatRooms.size() - 1));
                     }
                 }
@@ -286,7 +288,8 @@ public class Client{
                     {
                         Object o = theList.getModel().getElementAt(index);
                         chatRooms.add(o.toString());
-                        new ChatRoom(o.toString(), client);
+                        ChatRoom temp = new ChatRoom(o.toString(), client);
+                        objChatRooms.add(temp);
                     }
                 }
             }

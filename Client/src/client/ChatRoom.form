@@ -113,7 +113,7 @@
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Component id="jScrollPane3" min="-2" pref="160" max="-2" attributes="0"/>
+                              <Component id="jScrollPane3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jScrollPane5" max="32767" attributes="0"/>
                           </Group>
@@ -377,6 +377,7 @@
                     <MatteColorBorder/>
                   </Border>
                 </Property>
+                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel12">

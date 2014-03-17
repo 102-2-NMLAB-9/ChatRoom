@@ -6,6 +6,7 @@
 
 package client;
 
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,6 +23,10 @@ public class chatRoomQuestion extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.client = client;
+        int screen_width = Toolkit.getDefaultToolkit().getScreenSize().width;  
+        int screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;  
+        this.setLocation((screen_width - this.getWidth()) / 2,  
+                (screen_height - this.getHeight()) / 2);
         this.setVisible(true);
     }
 
@@ -81,14 +86,11 @@ public class chatRoomQuestion extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(roomId, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(81, 81, 81)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(47, Short.MAX_VALUE))
+                    .addComponent(roomId, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

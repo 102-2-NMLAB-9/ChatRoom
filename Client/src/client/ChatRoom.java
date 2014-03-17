@@ -6,6 +6,7 @@
 
 package client;
 
+import java.awt.Toolkit;
 import javax.swing.WindowConstants;
 
 /**
@@ -22,8 +23,12 @@ public class ChatRoom extends javax.swing.JFrame {
     public ChatRoom(String text, Client client) {
         this.setTitle(text);
         initComponents();
-        this.setVisible(true);
         this.client = client;
+        int screen_width = Toolkit.getDefaultToolkit().getScreenSize().width;  
+        int screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;  
+        this.setLocation((screen_width - this.getWidth()) / 2,  
+                (screen_height - this.getHeight()) / 2);
+        this.setVisible(true);
     }
 
     /**
@@ -128,6 +133,7 @@ public class ChatRoom extends javax.swing.JFrame {
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setBorder(new javax.swing.border.MatteBorder(null));
+        jLabel11.setOpaque(true);
 
         jLabel12.setBackground(new java.awt.Color(0, 0, 0));
         jLabel12.setBorder(new javax.swing.border.MatteBorder(null));
@@ -197,7 +203,7 @@ public class ChatRoom extends javax.swing.JFrame {
                                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane5)))
                 .addContainerGap())
