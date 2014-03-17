@@ -342,6 +342,11 @@ public class ChatRoom extends javax.swing.JFrame {
         usernames.add(name);
         model.addElement(name);
     }
+    
+    public String returnRoomId()
+    {
+        return roomId;
+    }
     /**
      * @param args the command line arguments
      */

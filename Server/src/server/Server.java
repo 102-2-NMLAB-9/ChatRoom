@@ -62,7 +62,7 @@ public class Server {
     private ServerSocket serverSocket;  
     private ServerThread serverThread;  
     private ArrayList<ClientThread> clients;
-    private ArrayList<String> RoomList; 
+    private ArrayList<RoomList> RoomList; 
   
     private boolean isStart = false;  
   
@@ -250,7 +250,7 @@ public class Server {
     public void serverStart(int max, int port) throws java.net.BindException {  
         try {  
             clients = new ArrayList<ClientThread>(); 
-            RoomList = new ArrayList<String>();
+            RoomList = new ArrayList<RoomList>();
             serverSocket = new ServerSocket(port);  
             serverThread = new ServerThread(serverSocket, max);  
             serverThread.start();  
@@ -420,7 +420,7 @@ public class Server {
                     String temp1 = "";
                     for ( int i = RoomList.size() - 1; i >= 0; i-- )
                     {
-                        temp1 += ( RoomList.get(i) + "@" );
+                        temp1 += ( RoomList.get(i).name + "@" );
                     }
                     writer.println("ROOMLIST@" + RoomList.size() + "@" + temp1);
                     writer.flush();
@@ -472,20 +472,35 @@ public class Server {
                             }  
                         }  
                     } 
-                    else if (command.equals("ADDROOM"))//加房間
+                    else if (command.equals("ADDROOM"))//增加房間
                     {
                         String roomId = stringTokenizer.nextToken();   
+                        String username = stringTokenizer.nextToken();
                         listmodel.addElement(roomId); 
-                        RoomList.add(roomId);
+                        RoomList.add(new RoomList(roomId, username));
                         for ( int i = clients.size() - 1; i >= 0; i-- )
                         {
                             clients.get(i).getWriter().println("ADDROOM@" + roomId);
                             clients.get(i).getWriter().flush();
                         }
                     }
-                    else if (command.equals("INVITE"))//刪房間
+                    else if (command.equals("INVITE"))//邀請別人
                     {                        
                         String name = stringTokenizer.nextToken();   
+                        String roomId = stringTokenizer.nextToken();
+                        for ( int i = RoomList.size() - 1; i >= 0; i-- )
+                        {
+                            if (RoomList.get(i).name.equals(roomId))
+                            {
+                                int size = Integer  
+                                .parseInt(stringTokenizer.nextToken());
+                                for (int j = 0; j < size; j++) 
+                                {  
+                                    String username = stringTokenizer.nextToken();  
+                                    RoomList.get(i).members.add(username);
+                                }
+                            }
+                        }
                         for ( int i = clients.size() - 1; i >= 0; i-- )
                         {
                             if ( clients.get(i).getUser().getName().equals(name) )
@@ -495,6 +510,32 @@ public class Server {
                             }
                         }
                         
+                    }
+                    else if (command.equals("ADDINROOM"))
+                    {
+                        //TODO:need to inform others.
+                        String roomId = stringTokenizer.nextToken();   
+                        String name = stringTokenizer.nextToken();
+                        for ( int i = RoomList.size() - 1; i >= 0; i-- )
+                        {
+                            if ( RoomList.get(i).name.equals(roomId))
+                            {
+                                String temp = "ADDINROOM@" + roomId + "@" + RoomList.get(i).members.size() + "@";
+                                for ( int j = RoomList.get(i).members.size() - 1; j >= 0; j-- )
+                                {
+                                    temp += (RoomList.get(i).members.get(j) + "@");
+                                }
+                                for ( int j = clients.size() - 1; j >= 0; j-- )
+                                {
+                                    if ( clients.get(j).getUser().getName().equals(name) )
+                                    {
+                                        clients.get(j).getWriter().println(temp);
+                                        clients.get(j).getWriter().flush();
+                                    }
+                                }
+                                RoomList.get(i).members.add(name);
+                            }
+                        }
                     }
                     else 
                     {  

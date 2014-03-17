@@ -260,7 +260,7 @@ public class Client{
                     {
                         ChatRoom temp = new ChatRoom(chatRooms.get(chatRooms.size() - 1), client);
                         objChatRooms.add(temp);
-                        sendMessage("ADDROOM@" + chatRooms.get(chatRooms.size() - 1));
+                        sendMessage("ADDROOM@" + chatRooms.get(chatRooms.size() - 1) + "@" + frame.getTitle());
                     }
                 }
             }
@@ -290,6 +290,7 @@ public class Client{
                         chatRooms.add(o.toString());
                         ChatRoom temp = new ChatRoom(o.toString(), client);
                         objChatRooms.add(temp);
+                        sendMessage("ADDINROOM@" + o.toString() + "@" + frame.getTitle());
                     }
                 }
             }
@@ -488,6 +489,23 @@ public class Client{
                             for ( int j = objChatRooms.size() - 1; j >= 0; j-- )
                             {
                                 objChatRooms.get(j).addList(username);
+                            }
+                        }
+                    }
+                    else if (command.equals("ADDINROOM"))
+                    {
+                        String roomId = stringTokenizer.nextToken();
+                        int size = Integer  
+                                .parseInt(stringTokenizer.nextToken());
+                        for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
+                        {
+                            if (objChatRooms.get(i).returnRoomId().equals(roomId))
+                            {
+                                for ( int j = 0; j < size; j++ )
+                                {
+                                    String username = stringTokenizer.nextToken();
+                                    objChatRooms.get(i).addList(username);
+                                }
                             }
                         }
                     }
