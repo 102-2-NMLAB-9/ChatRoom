@@ -45,7 +45,7 @@ import javax.swing.border.TitledBorder;
 public class Client{  
 
     private Client client;
-    private JFrame frame;  
+    public JFrame frame;  
     private JList userList;
     private JList roomList;
     private JTextArea textArea;  
@@ -129,7 +129,7 @@ public class Client{
         northPanel.add(txt_name);  
         northPanel.add(btn_start);  
         northPanel.add(btn_stop);  
-        northPanel.setBorder(new TitledBorder(" "));  
+        northPanel.setBorder(new TitledBorder("配置設定"));  
   
         rightScroll = new JScrollPane(textArea);  
         rightScroll.setBorder(new TitledBorder("訊息區"));
@@ -423,7 +423,11 @@ public class Client{
                         if ((username = stringTokenizer.nextToken()) != null  
                                 && (userIp = stringTokenizer.nextToken()) != null) {   
                             onLineUsers.add(username);  
-                            listModel.addElement(username);  
+                            listModel.addElement(username);
+                            for ( int i = objChatRooms.size() - 1; i >= 0; i--)
+                            {
+                                objChatRooms.get(i).addComboBox(username);
+                            }
                         }  
                     } else if (command.equals("DELETE")) {// 有用户下线更新在线列表  
                         String username = stringTokenizer.nextToken();   
@@ -469,6 +473,22 @@ public class Client{
                             chatRooms.add(roomId);  
                             listmodel.addElement(roomId); 
                         
+                        }
+                    }
+                    else if (command.equals("INVITE"))
+                    {
+                        String username = stringTokenizer.nextToken();
+                        String roomId = stringTokenizer.nextToken();
+                        ChatRoom temp = new ChatRoom(roomId, client);
+                        objChatRooms.add(temp);
+                        int size = Integer  
+                                .parseInt(stringTokenizer.nextToken());
+                        for (int i = 0; i < size; i++) {  
+                            username = stringTokenizer.nextToken();  
+                            for ( int j = objChatRooms.size() - 1; j >= 0; j-- )
+                            {
+                                objChatRooms.get(j).addList(username);
+                            }
                         }
                     }
                     else 

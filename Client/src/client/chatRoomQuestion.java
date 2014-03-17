@@ -19,10 +19,10 @@ public class chatRoomQuestion extends javax.swing.JDialog {
     /**
      * Creates new form chatRoomQuestion
      */
-    public chatRoomQuestion(java.awt.Frame parent, boolean modal, Client client) {
+    public chatRoomQuestion(java.awt.Frame parent, boolean modal, Client Client) {
         super(parent, modal);
         initComponents();
-        this.client = client;
+        this.client = Client;
         int screen_width = Toolkit.getDefaultToolkit().getScreenSize().width;  
         int screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;  
         this.setLocation((screen_width - this.getWidth()) / 2,  

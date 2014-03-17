@@ -7,7 +7,12 @@
 package client;
 
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JComboBox;
 import javax.swing.WindowConstants;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -16,18 +21,24 @@ import javax.swing.WindowConstants;
 public class ChatRoom extends javax.swing.JFrame {
     private static String roomId;
     private static Client client;
+    private static ArrayList<String> usernames = new ArrayList<String>();
+    private DefaultListModel model = new DefaultListModel();
 
     /**
      * Creates new form ChatRoom
      */
-    public ChatRoom(String text, Client client) {
-        this.setTitle(text);
+    public ChatRoom(String text, Client Client) {
         initComponents();
-        this.client = client;
+        this.roomId = text;
+        this.setTitle(text);
+        this.client = Client;
         int screen_width = Toolkit.getDefaultToolkit().getScreenSize().width;  
         int screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;  
         this.setLocation((screen_width - this.getWidth()) / 2,  
                 (screen_height - this.getHeight()) / 2);
+        myList.setModel(model);
+        usernames.add(client.frame.getTitle().toString());
+        model.addElement(client.frame.getTitle().toString());
         for ( int i = client.onLineUsers.size() - 1; i >= 0; i-- )
         {
             invite.addItem(client.onLineUsers.get(i));
@@ -48,7 +59,7 @@ public class ChatRoom extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        myList = new javax.swing.JList();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jScrollPane7 = new javax.swing.JScrollPane();
@@ -78,8 +89,8 @@ public class ChatRoom extends javax.swing.JFrame {
             }
         });
 
-        jList1.setBorder(javax.swing.BorderFactory.createTitledBorder("使用者列表"));
-        jScrollPane4.setViewportView(jList1);
+        myList.setBorder(javax.swing.BorderFactory.createTitledBorder("使用者列表"));
+        jScrollPane4.setViewportView(myList);
 
         jScrollPane3.setViewportView(jScrollPane4);
 
@@ -152,6 +163,11 @@ public class ChatRoom extends javax.swing.JFrame {
         jLabel14.setOpaque(true);
 
         invite.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "invite all" }));
+        invite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inviteActionPerformed(evt);
+            }
+        });
 
         jTextPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("發送訊息"));
         jScrollPane1.setViewportView(jTextPane2);
@@ -281,6 +297,51 @@ public class ChatRoom extends javax.swing.JFrame {
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_formWindowClosing
 
+    private void inviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inviteActionPerformed
+        // TODO add your handling code here:
+        JComboBox cb = (JComboBox) evt.getSource();
+        String name = (String)cb.getSelectedItem();
+        if ( name.equals("invite all") )
+        {
+            for ( int i = client.onLineUsers.size() - 1; i >=0; i-- )
+            {
+                sendComboBox(client.onLineUsers.get(i));
+            }
+            for ( int i = client.onLineUsers.size() - 1; i >=0; i-- )
+            {
+                usernames.add(client.onLineUsers.get(i));
+                model.addElement(client.onLineUsers.get(i));
+            }
+        }
+        else
+        {
+            sendComboBox(name);
+            usernames.add(name);
+            model.addElement(name);
+        }
+    }//GEN-LAST:event_inviteActionPerformed
+
+    private void sendComboBox (String name)
+    {
+        String temp = ("INVITE@" + name + "@" + roomId);
+        temp += ( "@" + usernames.size() );
+        for ( int j = usernames.size() - 1; j >= 0; j-- )
+        {
+            temp += ( "@" + usernames.get(j) );
+        }
+        client.sendMessage(temp);
+    }
+    
+    public void addComboBox (String name)
+    {
+        invite.addItem(name);
+    }
+    
+    public void addList (String name)
+    {
+        usernames.add(name);
+        model.addElement(name);
+    }
     /**
      * @param args the command line arguments
      */
@@ -333,7 +394,6 @@ public class ChatRoom extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -343,5 +403,6 @@ public class ChatRoom extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane jTextPane2;
+    private javax.swing.JList myList;
     // End of variables declaration//GEN-END:variables
 }
