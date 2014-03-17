@@ -73,7 +73,7 @@ public class Client{
     private PrintWriter writer;  
     private BufferedReader reader;  
     private MessageThread messageThread;// 负责接收消息的线程  
-    private Map<String, User> onLineUsers = new HashMap<String, User>();// 所有在线用户
+    public ArrayList<String> onLineUsers = new ArrayList<String>();// 所有在线用户
     public ArrayList<String> chatRooms = new ArrayList<String>();
     public ArrayList<ChatRoom> objChatRooms = new ArrayList<ChatRoom>();
   
@@ -421,15 +421,13 @@ public class Client{
                         String username = "";  
                         String userIp = "";  
                         if ((username = stringTokenizer.nextToken()) != null  
-                                && (userIp = stringTokenizer.nextToken()) != null) {  
-                            User user = new User(username, userIp);  
-                            onLineUsers.put(username, user);  
+                                && (userIp = stringTokenizer.nextToken()) != null) {   
+                            onLineUsers.add(username);  
                             listModel.addElement(username);  
                         }  
                     } else if (command.equals("DELETE")) {// 有用户下线更新在线列表  
-                        String username = stringTokenizer.nextToken();  
-                        User user = (User) onLineUsers.get(username);  
-                        onLineUsers.remove(user);  
+                        String username = stringTokenizer.nextToken();   
+                        onLineUsers.remove(username);  
                         listModel.removeElement(username);  
                     } else if (command.equals("USERLIST")) {// 加载在线用户列表  
                         int size = Integer  
@@ -438,9 +436,8 @@ public class Client{
                         String userIp = null;  
                         for (int i = 0; i < size; i++) {  
                             username = stringTokenizer.nextToken();  
-                            userIp = stringTokenizer.nextToken();  
-                            User user = new User(username, userIp);  
-                            onLineUsers.put(username, user);  
+                            userIp = stringTokenizer.nextToken();    
+                            onLineUsers.add(username);  
                             listModel.addElement(username);  
                         }  
                     } else if (command.equals("MAX")) {// 人数已达上限  
