@@ -531,8 +531,22 @@ public class Server {
                                         clients.get(j).getWriter().flush();
                                     }
                                 }
+                                String temp1 = "ROOMINFORM@" + roomId + "@" + name;
+                                for ( int j = clients.size() - 1; j >= 0; j-- )
+                                {
+                                    clients.get(j).getWriter().println(temp1);
+                                    clients.get(j).getWriter().flush();
+                                }
                                 RoomList.get(i).members.add(name);
                             }
+                        }
+                    }
+                    else if (command.equals("ROOMCHAT"))
+                    {
+                        for ( int j = clients.size() - 1; j >= 0; j-- )
+                        {
+                            clients.get(j).getWriter().println(message);
+                            clients.get(j).getWriter().flush();
                         }
                     }
                     else 

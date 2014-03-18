@@ -526,6 +526,30 @@ public class Client{
                                         }
                                     }
                                 }
+                                else if (command.equals("ROOMINFORM"))
+                                {
+                                    String roomId = stringTokenizer.nextToken();   
+                                    String name = stringTokenizer.nextToken();
+                                    for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
+                                    {
+                                        if (objChatRooms.get(i).returnRoomId().equals(roomId) && !name.equals(frame.getTitle()))
+                                        {
+                                            objChatRooms.get(i).addList(name);
+                                        }
+                                    }
+                                }
+                                else if (command.equals("ROOMCHAT"))
+                                {
+                                    String roomId = stringTokenizer.nextToken();
+                                    String text = stringTokenizer.nextToken(); 
+                                    for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
+                                    {
+                                        if (objChatRooms.get(i).returnRoomId().equals(roomId))
+                                        {
+                                            objChatRooms.get(i).addText(text);
+                                        }
+                                    }
+                                }
                                 else 
                                 {   // 普通消息  
                                     textArea.append(message + "\r\n");  

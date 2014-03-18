@@ -62,7 +62,7 @@ public class ChatRoom extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         myList = new javax.swing.JList();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        jEditorPane1 = new javax.swing.JEditorPane();
         jScrollPane7 = new javax.swing.JScrollPane();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -80,8 +80,8 @@ public class ChatRoom extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         invite = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane2 = new javax.swing.JTextPane();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jEditorPane2 = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -95,12 +95,16 @@ public class ChatRoom extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(jScrollPane4);
 
-        jTextPane1.setEditable(false);
-        jTextPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("訊息欄"));
-        jScrollPane5.setViewportView(jTextPane1);
+        jEditorPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("訊息欄"));
+        jScrollPane5.setViewportView(jEditorPane1);
 
         jButton1.setText("send");
         jButton1.setToolTipText("");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setBackground(new java.awt.Color(0, 0, 0));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/wreck-it-ralph-vanellope.jpg"))); // NOI18N
@@ -170,8 +174,8 @@ public class ChatRoom extends javax.swing.JFrame {
             }
         });
 
-        jTextPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("發送訊息"));
-        jScrollPane1.setViewportView(jTextPane2);
+        jEditorPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("發送訊息"));
+        jScrollPane6.setViewportView(jEditorPane2);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -182,9 +186,9 @@ public class ChatRoom extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane7)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 699, Short.MAX_VALUE)
+                            .addComponent(jScrollPane6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,7 +238,7 @@ public class ChatRoom extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
                     .addComponent(jScrollPane5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -267,7 +271,7 @@ public class ChatRoom extends javax.swing.JFrame {
                         .addComponent(invite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -305,6 +309,7 @@ public class ChatRoom extends javax.swing.JFrame {
         if ( name.equals("invite all") )
         {
             //TODO:need to fix
+            /*
             for ( int i = client.onLineUsers.size() - 1; i >=0; i-- )
             {
                 sendComboBox(client.onLineUsers.get(i));
@@ -314,6 +319,7 @@ public class ChatRoom extends javax.swing.JFrame {
                 usernames.add(client.onLineUsers.get(i));
                 model.addElement(client.onLineUsers.get(i));
             }
+            */
         }
         else
         {
@@ -322,6 +328,12 @@ public class ChatRoom extends javax.swing.JFrame {
             model.addElement(name);
         }
     }//GEN-LAST:event_inviteActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        client.sendMessage("ROOMCHAT@" + roomId + "@" + jEditorPane2.getText());
+        jEditorPane2.setText("");
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     //send message when inviting
     private void sendComboBox (String name)
@@ -388,9 +400,17 @@ public class ChatRoom extends javax.swing.JFrame {
         });
     }
 
+    public void addText(String text)
+    {
+        String s = jEditorPane1.getText();
+        s += (text + "\n");
+        jEditorPane1.setText(s);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox invite;
     private javax.swing.JButton jButton1;
+    private javax.swing.JEditorPane jEditorPane1;
+    private javax.swing.JEditorPane jEditorPane2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -406,14 +426,12 @@ public class ChatRoom extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JTextPane jTextPane2;
     private javax.swing.JList myList;
     // End of variables declaration//GEN-END:variables
 }
