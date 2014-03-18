@@ -184,7 +184,7 @@ public class Client{
         btn_start.addActionListener(new ActionListener() {  
             public void actionPerformed(ActionEvent e) {  
                 int port;  
-                if (isConnected) {  
+                if (isConnected) {
                     JOptionPane.showMessageDialog(null, "已連線，請不要再連一次!",  
                             "Error", JOptionPane.ERROR_MESSAGE);  
                     return;  
@@ -204,17 +204,18 @@ public class Client{
                         throw new Exception("有欄位未填!");  
                     }  
                     boolean flag = connectServer(port, hostIp, name);  
+
                     if (flag == false) {  
                         throw new Exception("連線失敗QQ");  
                     }  
                     else{
-                    frame.setTitle(name);  
-                    btn_start.setEnabled(false);  
-                    txt_name.setEnabled(false); 
-                    txt_port.setEnabled(false);
-                    txt_hostIp.setEnabled(false);
-                    btn_stop.setEnabled(true);  
-                    }
+                        frame.setTitle(name);  
+                        btn_start.setEnabled(false);  
+                        txt_name.setEnabled(false); 
+                        txt_port.setEnabled(false);
+                        txt_hostIp.setEnabled(false);
+                        btn_stop.setEnabled(true);
+                   }
                 } catch (Exception exc) {  
                     JOptionPane.showMessageDialog(null, exc.getMessage(),  
                             "Error", JOptionPane.ERROR_MESSAGE);  
@@ -236,12 +237,12 @@ public class Client{
                         throw new Exception("無法斷開魂結！");  
                     }  
                     else {
-                    JOptionPane.showMessageDialog(null, "你下線囉!" , "通知" , JOptionPane.PLAIN_MESSAGE); 
-                    btn_start.setEnabled(true);  
-                    txt_name.setEnabled(true); 
-                    txt_port.setEnabled(true);
-                    txt_hostIp.setEnabled(true);
-                    btn_stop.setEnabled(false);  
+                        JOptionPane.showMessageDialog(null, "你下線囉!" , "通知" , JOptionPane.PLAIN_MESSAGE); 
+                        btn_start.setEnabled(true);  
+                        txt_name.setEnabled(true); 
+                        txt_port.setEnabled(true);
+                        txt_hostIp.setEnabled(true);
+                        btn_stop.setEnabled(false);  
                     }
                 } catch (Exception exc) {  
                     JOptionPane.showMessageDialog(frame, exc.getMessage(),  
@@ -316,11 +317,12 @@ public class Client{
             reader = new BufferedReader(new InputStreamReader(socket  
                     .getInputStream()));  
             // 发送客户端用户基本信息(用户名和ip地址)  
-            sendMessage(name + "@" + socket.getLocalAddress().toString());  
+            sendMessage(name + "@" + socket.getLocalAddress().toString());
             // 开启接收消息的线程  
             messageThread = new MessageThread(reader, textArea);  
-            messageThread.start();  
             isConnected = true;// 已经连接上了  
+            messageThread.start();  
+            
             return true;  
         } catch (Exception e) {  
             textArea.append("port：" + port + "    IP：" + hostIp  
@@ -373,19 +375,20 @@ public class Client{
     }  
   
     // 不断接收消息的线程  
-    class MessageThread extends Thread {  
+    class MessageThread extends Thread {
         private BufferedReader reader;  
         private JTextArea textArea;  
   
         // 接收消息线程的构造方法  
-        public MessageThread(BufferedReader reader, JTextArea textArea) {  
+        public MessageThread(BufferedReader reader, JTextArea textArea) {
             this.reader = reader;  
             this.textArea = textArea;  
         }  
   
         // 被动的关闭连接  
-        public synchronized void closeCon() throws Exception {  
+        public synchronized void closeCon() throws Exception {
             // 清空用户列表  
+            sleep(300);
             listModel.removeAllElements();
             listmodel.removeAllElements();
             onLineUsers.clear();
@@ -410,161 +413,160 @@ public class Client{
         }  
   
         public void run() 
-        {  
+        {
             String message = "";  
             while (true) {  
-                            try {  
-                                message = reader.readLine();  
-                                StringTokenizer stringTokenizer = new StringTokenizer(  
-                                        message, "/@");  
-                                String command = stringTokenizer.nextToken();// 命令  
-                                if (command.equals("CLOSE"))// 服务器已关闭命令  
-                                {  
-                                    textArea.append("伺服器維修關閉!\r\n");  
-                                    closeCon();// 被动的关闭连接   
-                                    return;// 结束线程  
-                                } 
-                                else if (command.equals("ADD")) 
-                                {   // 有用户上线更新在线列表  
-                                    String username = "";  
-                                    String userIp = "";  
-                                    if ((username = stringTokenizer.nextToken()) != null  
-                                            && (userIp = stringTokenizer.nextToken()) != null) {   
-                                        onLineUsers.add(username);  
-                                        listModel.addElement(username);
-                                        for ( int i = objChatRooms.size() - 1; i >= 0; i--)
-                                        {
-                                            objChatRooms.get(i).addComboBox(username);
-                                        }
-                                    }  
-                                } 
-                                else if (command.equals("DELETE")) 
-                                {   // 有用户下线更新在线列表  
-                                    String username = stringTokenizer.nextToken();   
-                                    onLineUsers.remove(username);  
-                                    listModel.removeElement(username);  
-                                } 
-                                else if (command.equals("USERLIST"))
-                                {   // 加载在线用户列表  
-                                    int size = Integer  
-                                            .parseInt(stringTokenizer.nextToken());  
-                                    String username = null;  
-                                    String userIp = null;  
-                                    for (int i = 0; i < size; i++) {  
-                                        username = stringTokenizer.nextToken();  
-                                        userIp = stringTokenizer.nextToken();    
-                                        onLineUsers.add(username);  
-                                        listModel.addElement(username);  
-                                    }  
-                                } 
-                                else if (command.equals("MAX")) 
-                                {   // 人数已达上限  
-                                    textArea.append(stringTokenizer.nextToken()  
-                                            + stringTokenizer.nextToken() + "\r\n");  
-                                    closeCon();// 被动的关闭连接  
-                                    JOptionPane.showMessageDialog(null, "上線人數過多，請稍後再嘗試！", "Error",  
-                                            JOptionPane.ERROR_MESSAGE);  
-                                    return;// 结束线程  
-                                } 
-                                else if (command.equals("USED")) 
-                                {   //使用者名稱重複
-                                    textArea.append(stringTokenizer.nextToken()  
-                                            + stringTokenizer.nextToken() + "\r\n");  
-                                    closeCon();// 被动的关闭连接  
-                                    JOptionPane.showMessageDialog(null, "暱稱已有人使用，請換一個！", "Error",  
-                                            JOptionPane.ERROR_MESSAGE);  
-                                    return;// 结束线程                          
-                                }  
-                                else if (command.equals("ADDROOM")) 
-                                {   //開房間
-                                    String roomId = stringTokenizer.nextToken();  
-                                    chatRooms.add(roomId);  
-                                    listmodel.addElement(roomId); 
-                                }
-                                else if (command.equals("ROOMLIST"))
-                                {   //更新房間列表                        
-                                    int size = Integer  
-                                    .parseInt(stringTokenizer.nextToken());  
-                                    String roomId = null;    
-                                    for (int i = 0; i < size; i++) {  
-                                        roomId = stringTokenizer.nextToken();    
-                                        chatRooms.add(roomId);  
-                                        listmodel.addElement(roomId); 
+                try {  
+                    message = reader.readLine();  
+                    StringTokenizer stringTokenizer = new StringTokenizer(  
+                            message, "/@");  
+                    String command = stringTokenizer.nextToken();// 命令  
+                    if (command.equals("CLOSE"))// 服务器已关闭命令  
+                    {  
+                        textArea.append("伺服器維修關閉!\r\n");  
+                        closeCon();// 被动的关闭连接   
+                        return;// 结束线程  
+                    } 
+                    else if (command.equals("ADD")) 
+                    {   // 有用户上线更新在线列表  
+                        String username = "";  
+                        String userIp = "";  
+                        if ((username = stringTokenizer.nextToken()) != null  
+                                && (userIp = stringTokenizer.nextToken()) != null) {   
+                            onLineUsers.add(username);  
+                            listModel.addElement(username);
+                            for ( int i = objChatRooms.size() - 1; i >= 0; i--)
+                            {
+                                objChatRooms.get(i).addComboBox(username);
+                            }
+                        }  
+                    } 
+                    else if (command.equals("DELETE"))
+                    {   // 有用户下线更新在线列表  
+                        String username = stringTokenizer.nextToken();   
+                        onLineUsers.remove(username);  
+                        listModel.removeElement(username);  
+                    } 
+                    else if (command.equals("USERLIST"))
+                    {   // 加载在线用户列表  
+                        int size = Integer  
+                                .parseInt(stringTokenizer.nextToken());  
+                        String username = null;  
+                        String userIp = null;  
+                        for (int i = 0; i < size; i++) {  
+                            username = stringTokenizer.nextToken();  
+                            userIp = stringTokenizer.nextToken();    
+                            onLineUsers.add(username);  
+                            listModel.addElement(username);  
+                        }  
+                    } 
+                    else if (command.equals("MAX")) 
+                    {   // 人数已达上限  
+                        textArea.append(stringTokenizer.nextToken()  
+                                + stringTokenizer.nextToken() + "\r\n");  
+                        closeCon();// 被动的关闭连接  
+                        JOptionPane.showMessageDialog(null, "上線人數過多，請稍後再嘗試！", "Error",  
+                                JOptionPane.ERROR_MESSAGE);  
+                        return;// 结束线程  
+                    } 
+                    else if (command.equals("USED")) 
+                    {   //使用者名稱重複
+                        textArea.append(stringTokenizer.nextToken()  
+                                + stringTokenizer.nextToken() + "\r\n");  
+                        closeCon();// 被动的关闭连接  
+                        JOptionPane.showMessageDialog(null, "暱稱已有人使用，請換一個！", "Error",  
+                                JOptionPane.ERROR_MESSAGE);  
+                        return;// 结束线程                          
+                    }  
+                    else if (command.equals("ADDROOM")) 
+                    {   //開房間
+                        String roomId = stringTokenizer.nextToken();  
+                        chatRooms.add(roomId);  
+                        listmodel.addElement(roomId); 
+                    }
+                    else if (command.equals("ROOMLIST"))
+                    {   //更新房間列表                        
+                        int size = Integer  
+                        .parseInt(stringTokenizer.nextToken());  
+                        String roomId = null;    
+                        for (int i = 0; i < size; i++) {  
+                            roomId = stringTokenizer.nextToken();    
+                            chatRooms.add(roomId);  
+                            listmodel.addElement(roomId); 
 
-                                    }
-                                }
-                                else if (command.equals("INVITE"))
-                                {   //邀請別人
+                        }
+                    }
+                    else if (command.equals("INVITE"))
+                    {   //邀請別人
+                        String username = stringTokenizer.nextToken();
+                        String roomId = stringTokenizer.nextToken();
+                        ChatRoom temp = new ChatRoom(roomId, client);
+                        objChatRooms.add(temp);
+                        int size = Integer  
+                                .parseInt(stringTokenizer.nextToken());
+                        for (int i = 0; i < size; i++) {  
+                            username = stringTokenizer.nextToken();  
+                            for ( int j = objChatRooms.size() - 1; j >= 0; j-- )
+                            {
+                                objChatRooms.get(j).addList(username);
+                            }
+                        }
+                    }
+                    else if (command.equals("ADDINROOM"))
+                    {   //主動加入房間
+                        String roomId = stringTokenizer.nextToken();
+                        int size = Integer  
+                                .parseInt(stringTokenizer.nextToken());
+                        for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
+                        {
+                            if (objChatRooms.get(i).returnRoomId().equals(roomId))
+                            {
+                                for ( int j = 0; j < size; j++ )
+                                {
                                     String username = stringTokenizer.nextToken();
-                                    String roomId = stringTokenizer.nextToken();
-                                    ChatRoom temp = new ChatRoom(roomId, client);
-                                    objChatRooms.add(temp);
-                                    int size = Integer  
-                                            .parseInt(stringTokenizer.nextToken());
-                                    for (int i = 0; i < size; i++) {  
-                                        username = stringTokenizer.nextToken();  
-                                        for ( int j = objChatRooms.size() - 1; j >= 0; j-- )
-                                        {
-                                            objChatRooms.get(j).addList(username);
-                                        }
-                                    }
+                                    objChatRooms.get(i).addList(username);
                                 }
-                                else if (command.equals("ADDINROOM"))
-                                {   //主動加入房間
-                                    String roomId = stringTokenizer.nextToken();
-                                    int size = Integer  
-                                            .parseInt(stringTokenizer.nextToken());
-                                    for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
-                                    {
-                                        if (objChatRooms.get(i).returnRoomId().equals(roomId))
-                                        {
-                                            for ( int j = 0; j < size; j++ )
-                                            {
-                                                String username = stringTokenizer.nextToken();
-                                                objChatRooms.get(i).addList(username);
-                                            }
-                                        }
-                                    }
-                                }
-                                else if (command.equals("ROOMINFORM"))
-                                {
-                                    String roomId = stringTokenizer.nextToken();   
-                                    String name = stringTokenizer.nextToken();
-                                    for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
-                                    {
-                                        if (objChatRooms.get(i).returnRoomId().equals(roomId) && !name.equals(frame.getTitle()))
-                                        {
-                                            objChatRooms.get(i).addList(name);
-                                        }
-                                    }
-                                }
-                                else if (command.equals("ROOMCHAT"))
-                                {
-                                    String roomId = stringTokenizer.nextToken();
-                                    String text = stringTokenizer.nextToken(); 
-                                    for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
-                                    {
-                                        if (objChatRooms.get(i).returnRoomId().equals(roomId))
-                                        {
-                                            objChatRooms.get(i).addText(text);
-                                        }
-                                    }
-                                }
-                                else 
-                                {   // 普通消息  
-                                    textArea.append(message + "\r\n");  
-                                }  
-                            } 
-                            catch (IOException e) 
-                            {  
-                                e.printStackTrace();  
-                            } 
-                            catch (Exception e) 
-                            {  
-                                e.printStackTrace();  
-                            }  
-                        }         
-        }  
+                            }
+                        }
+                    }
+                    else if (command.equals("ROOMINFORM"))
+                    {
+                        String roomId = stringTokenizer.nextToken();   
+                        String name = stringTokenizer.nextToken();
+                        for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
+                        {
+                            if (objChatRooms.get(i).returnRoomId().equals(roomId) && !name.equals(frame.getTitle()))
+                            {
+                                objChatRooms.get(i).addList(name);
+                            }
+                        }
+                    }
+                    else if (command.equals("ROOMCHAT"))
+                    {
+                        String roomId = stringTokenizer.nextToken();
+                        String text = stringTokenizer.nextToken(); 
+                        for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
+                        {
+                            if (objChatRooms.get(i).returnRoomId().equals(roomId))
+                            {
+                                objChatRooms.get(i).addText(text);
+                            }
+                        }
+                    }
+                    else 
+                    {   // 普通消息  
+                        textArea.append(message + "\r\n");  
+                    }  
+                }
+                catch (IOException e) 
+                {
+                    e.printStackTrace();
+                }
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
     }  
 }  
-

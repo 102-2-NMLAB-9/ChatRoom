@@ -4,7 +4,7 @@
  * Created on 2010/4/12, 上午 05:45:36
  */
 
-package fileexchange;
+package client;
 import java.io.*;
 import javax.swing.*;
 /**

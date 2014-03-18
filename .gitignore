@@ -3,3 +3,4 @@ build
 /Client/dist/
 /Client/nbproject/private/
 /Server/nbproject/private/
+/Server/dist/
