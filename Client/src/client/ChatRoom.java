@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -386,9 +387,24 @@ public class ChatRoom extends javax.swing.JFrame {
 
     public void addText(String text)
     {
-        String s = jEditorPane1.getText();
-        s += (text + "\n");
-        jEditorPane1.setText(s);
+        class temp implements Runnable
+        {
+            public temp (String text)
+            {
+                this.text = text;
+            }
+            private String text;
+            
+            @Override
+            public void run()
+            {
+                String s = jEditorPane1.getText();
+                s += (text + "\r\n");
+                jEditorPane1.setText(s);
+            }
+        }
+        
+        SwingUtilities.invokeLater(new temp(text));
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox invite;
