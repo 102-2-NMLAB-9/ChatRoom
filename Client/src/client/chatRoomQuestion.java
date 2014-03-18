@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class chatRoomQuestion extends javax.swing.JDialog {
     
+    //need to pass client in
     private static Client client;
     /**
      * Creates new form chatRoomQuestion
@@ -112,7 +113,7 @@ public class chatRoomQuestion extends javax.swing.JDialog {
         boolean jump = false;
         for ( int i = client.chatRooms.size() - 1; i >= 0; i-- )
         {
-            if ( client.chatRooms.get(i).equals(roomId.getText()) )
+            if ( client.chatRooms.get(i).equals(roomId.getText()) ) // check name
             {
                 jump = true;
             }

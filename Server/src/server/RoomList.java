@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * @author nmlab212
  */
 public class RoomList {
+    //public for server access easily
     public String name;
     public ArrayList<String> members = new ArrayList<String>();
     

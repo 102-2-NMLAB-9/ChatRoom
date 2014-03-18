@@ -73,26 +73,30 @@ public class Server {
   
     // 执行消息发送  
     public void send() {  
-        if (!isStart) {  
+        if (!isStart) 
+        {  
             JOptionPane.showMessageDialog(null, "司服器尚未啟動，請不要猴急！", "Error",  
                     JOptionPane.ERROR_MESSAGE);  
         }  
-        else if (clients.size() == 0) {  
+        else if (clients.size() == 0) 
+        {  
             JOptionPane.showMessageDialog(null, "沒有用戶連線，只能和空氣說話！", "Error",  
                     JOptionPane.ERROR_MESSAGE);  
         }  
         else {
-            String message = txt_message.getText().trim();  
-            if (message == null || message.equals("")) {  
-                JOptionPane.showMessageDialog(null, "請不要亂發廢文！", "Error",  
+                String message = txt_message.getText().trim();  
+                if (message == null || message.equals("")) 
+                {  
+                    JOptionPane.showMessageDialog(null, "請不要亂發廢文！", "Error",  
                         JOptionPane.ERROR_MESSAGE);   
-            }  
-            else{
-                sendServerMessage(txt_message.getText());// 群发服务器消息  
-                contentArea.append("伺服器公告：" + txt_message.getText() + "\n");  
-                txt_message.setText(null);  
+                }  
+                else
+                {
+                    sendServerMessage(txt_message.getText());// 群发服务器消息  
+                    contentArea.append("伺服器公告：" + txt_message.getText() + "\n");  
+                    txt_message.setText(null);  
+                }
             }
-        }
     }  
   
     // 构造放法  
@@ -492,13 +496,7 @@ public class Server {
                         {
                             if (RoomList.get(i).name.equals(roomId))
                             {
-                                int size = Integer  
-                                .parseInt(stringTokenizer.nextToken());
-                                for (int j = 0; j < size; j++) 
-                                {  
-                                    String username = stringTokenizer.nextToken();  
-                                    RoomList.get(i).members.add(username);
-                                }
+                                RoomList.get(i).members.add(name);
                             }
                         }
                         for ( int i = clients.size() - 1; i >= 0; i-- )
@@ -511,7 +509,7 @@ public class Server {
                         }
                         
                     }
-                    else if (command.equals("ADDINROOM"))
+                    else if (command.equals("ADDINROOM"))//加入房間
                     {
                         //TODO:need to inform others.
                         String roomId = stringTokenizer.nextToken();   

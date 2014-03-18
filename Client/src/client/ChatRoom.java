@@ -20,6 +20,7 @@ import javax.swing.DefaultListModel;
  */
 public class ChatRoom extends javax.swing.JFrame {
     private static String roomId;
+    //need to pass client in.
     private static Client client;
     private static ArrayList<String> usernames = new ArrayList<String>();
     private DefaultListModel model = new DefaultListModel();
@@ -38,7 +39,7 @@ public class ChatRoom extends javax.swing.JFrame {
                 (screen_height - this.getHeight()) / 2);
         myList.setModel(model);
         usernames.add(client.frame.getTitle().toString());
-        model.addElement(client.frame.getTitle().toString());
+        model.addElement(client.frame.getTitle().toString() + "                                       ");
         for ( int i = client.onLineUsers.size() - 1; i >= 0; i-- )
         {
             invite.addItem(client.onLineUsers.get(i));
@@ -303,6 +304,7 @@ public class ChatRoom extends javax.swing.JFrame {
         String name = (String)cb.getSelectedItem();
         if ( name.equals("invite all") )
         {
+            //TODO:need to fix
             for ( int i = client.onLineUsers.size() - 1; i >=0; i-- )
             {
                 sendComboBox(client.onLineUsers.get(i));
@@ -321,6 +323,7 @@ public class ChatRoom extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_inviteActionPerformed
 
+    //send message when inviting
     private void sendComboBox (String name)
     {
         String temp = ("INVITE@" + name + "@" + roomId);
@@ -332,17 +335,20 @@ public class ChatRoom extends javax.swing.JFrame {
         client.sendMessage(temp);
     }
     
+    //invite combobox function for client
     public void addComboBox (String name)
     {
         invite.addItem(name);
     }
     
+    //userlist function for client
     public void addList (String name)
     {
         usernames.add(name);
         model.addElement(name);
     }
     
+    //to inform client this roomId
     public String returnRoomId()
     {
         return roomId;
