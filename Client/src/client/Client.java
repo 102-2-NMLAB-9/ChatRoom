@@ -365,6 +365,7 @@ public class Client{
             listmodel.removeAllElements();
             onLineUsers.clear();
             chatRooms.clear();
+            objChatRooms.clear();
             frame.setTitle("Client");
             sendMessage("CLOSE");// 发送断开连接命令给服务器 
             messageThread.stop();// 停止接受消息线程  
@@ -406,6 +407,7 @@ public class Client{
             listmodel.removeAllElements();
             onLineUsers.clear();
             chatRooms.clear(); 
+            objChatRooms.clear();
             btn_start.setEnabled(true);  
             txt_name.setEnabled(true); 
             txt_port.setEnabled(true);
@@ -523,7 +525,7 @@ public class Client{
                                 
                             }
                         }
-                        if (jump)
+                        if (jump && frame.getTitle().equals(username))
                         {
                             ChatRoom temp = new ChatRoom(roomId, client);
                             objChatRooms.add(temp);

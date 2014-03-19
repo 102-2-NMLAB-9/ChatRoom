@@ -501,11 +501,8 @@ public class Server {
                         }
                         for ( int i = clients.size() - 1; i >= 0; i-- )
                         {
-                            if ( clients.get(i).getUser().getName().equals(name) )
-                            {
-                                clients.get(i).getWriter().println(message);
-                                clients.get(i).getWriter().flush();
-                            }
+                            clients.get(i).getWriter().println(message);
+                            clients.get(i).getWriter().flush();
                         }
                         
                     }
