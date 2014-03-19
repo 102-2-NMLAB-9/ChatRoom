@@ -313,6 +313,43 @@ public class Client{
                 }
             }
         });
+        
+        //雙擊使用者會開私房
+        userList.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) 
+            {
+                JList theList = (JList) mouseEvent.getSource();
+                if (mouseEvent.getClickCount() == 2) 
+                {
+                    int index = theList.locationToIndex(mouseEvent.getPoint());
+                    if (index >= 0) 
+                    {
+                        Object o = theList.getModel().getElementAt(index);
+                        String st = o + "和" + frame.getTitle() + "的小天地";
+                        boolean jump = true;
+                        for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
+                        {
+                            if (objChatRooms.get(i).returnRoomId().equals(st))
+                            {
+                                jump = false;
+                                objChatRooms.get(i).setVisible(true);
+                                objChatRooms.get(i).setState(JFrame.NORMAL);
+                            }
+                        }
+                        if (jump)
+                        {
+                            chatRooms.add(st);
+                            ChatRoom temp = new ChatRoom(st, client);
+                            objChatRooms.add(temp);
+                            sendMessage("ADDROOMPRIVATE@" + st + "@" + frame.getTitle());
+                            sendMessage("INVITE@" + o + "@" + st + "@" + "1" + "@" + frame.getTitle());
+                        }
+                    }
+                }
+            }
+        });
     }  
   
     /**  
@@ -461,6 +498,11 @@ public class Client{
                         String username = stringTokenizer.nextToken();   
                         onLineUsers.remove(username);  
                         listModel.removeElement(username);  
+                        for (int i = objChatRooms.size() - 1; i >= 0; i--)
+                        {
+                            objChatRooms.get(i).deleteComboBox(username);
+                            objChatRooms.get(i).deleteList(username);
+                        }
                     } 
                     else if (command.equals("USERLIST"))
                     {   // 加载在线用户列表  

@@ -43,7 +43,7 @@ public class Server {
     private JTextArea contentArea;  
     private JTextField txt_message;  
     private JTextField txt_max;  
-    private JTextField txt_port;  
+    private JTextField txt_port;
     private JButton btn_start;  
     private JButton btn_stop;  
     private JButton btn_send;  
@@ -291,6 +291,7 @@ public class Server {
             }  
             listModel.removeAllElements();// 清空用户列表  
             listmodel.removeAllElements();
+            RoomList.clear();
             isStart = false;  
         } catch (IOException e) {  
             e.printStackTrace();  
@@ -462,10 +463,20 @@ public class Server {
                             clients.get(i).getWriter().println(  
                                     "DELETE@" + user.getName());  
                             clients.get(i).getWriter().flush();  
-                        }  
+                        } 
   
                         listModel.removeElement(user.getName());// 更新在线列表  
-  
+                        
+                        for (int i = RoomList.size() - 1; i >= 0; i--)
+                        {
+                            RoomList.get(i).members.remove(user.getName());
+                            if (RoomList.get(i).members.size() == 0)
+                            {
+                                listmodel.removeElement(RoomList.get(i).name);
+                                RoomList.remove(i);
+                            }
+                        }
+                                                
                         // 删除此条客户端服务线程  
                         for (int i = clients.size() - 1; i >= 0; i--) {  
                             if (clients.get(i).getUser() == user) {  
@@ -545,6 +556,13 @@ public class Server {
                             clients.get(j).getWriter().println(message);
                             clients.get(j).getWriter().flush();
                         }
+                    }
+                    else if (command.equals("ADDROOMPRIVATE"))
+                    {
+                        String roomId = stringTokenizer.nextToken();   
+                        String username = stringTokenizer.nextToken();
+                        listmodel.addElement(roomId); 
+                        RoomList.add(new RoomList(roomId, username));
                     }
                     else 
                     {  

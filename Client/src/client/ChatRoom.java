@@ -97,6 +97,7 @@ public class ChatRoom extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(jScrollPane4);
 
+        jTextPane2.setEditable(false);
         jTextPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("訊息欄"));
         jScrollPane5.setViewportView(jTextPane2);
 
@@ -395,6 +396,11 @@ public class ChatRoom extends javax.swing.JFrame {
         client.sendMessage(temp);
     }
     
+    public void deleteComboBox(String name)
+    {
+        invite.removeItem(name);
+    }
+    
     //invite combobox function for client
     public void addComboBox (String name)
     {
@@ -417,6 +423,12 @@ public class ChatRoom extends javax.swing.JFrame {
             usernames.add(name);
             model.addElement(name);
         }
+    }
+    
+    public void deleteList (String name)
+    {
+        usernames.remove(name);
+        model.removeElement(name);
     }
     
     //to inform client this roomId
