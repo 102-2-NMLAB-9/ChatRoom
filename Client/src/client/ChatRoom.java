@@ -312,7 +312,7 @@ public class ChatRoom extends javax.swing.JFrame {
         // TODO add your handling code here:
         JComboBox cb = (JComboBox) evt.getSource();
         String name = (String)cb.getSelectedItem();
-        if ( name.equals("invite all") )
+        if ( name.equals("invite") )
         {
             //TODO:need to fix
             /*
