@@ -7,6 +7,7 @@
 package client;
 
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -120,7 +121,10 @@ public class chatRoomQuestion extends javax.swing.JDialog {
 
     private void roomIdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_roomIdKeyPressed
         // TODO add your handling code here:
-        judgeRoom();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            judgeRoom();
+        }
     }//GEN-LAST:event_roomIdKeyPressed
 
     private void judgeRoom ()

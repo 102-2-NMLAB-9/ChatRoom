@@ -513,15 +513,26 @@ public class Client{
                     {   //邀請別人
                         String username = stringTokenizer.nextToken();
                         String roomId = stringTokenizer.nextToken();
-                        ChatRoom temp = new ChatRoom(roomId, client);
-                        objChatRooms.add(temp);
-                        int size = Integer  
-                                .parseInt(stringTokenizer.nextToken());
-                        for (int i = 0; i < size; i++) {  
-                            username = stringTokenizer.nextToken();  
-                            for ( int j = objChatRooms.size() - 1; j >= 0; j-- )
+                        boolean jump = true;
+                        for ( int i = objChatRooms.size() - 1; i >= 0; i--)
+                        {
+                            if (objChatRooms.get(i).returnRoomId().equals(roomId))
                             {
-                                objChatRooms.get(j).addList(username);
+                                jump = false;
+                                objChatRooms.get(i).addList(username);
+                                
+                            }
+                        }
+                        if (jump)
+                        {
+                            ChatRoom temp = new ChatRoom(roomId, client);
+                            objChatRooms.add(temp);
+                            int size = Integer  
+                                .parseInt(stringTokenizer.nextToken());
+                            for (int i = 0; i < size; i++) 
+                            {  
+                                username = stringTokenizer.nextToken();  
+                                temp.addList(username);
                             }
                         }
                     }
@@ -551,6 +562,8 @@ public class Client{
                             if (objChatRooms.get(i).returnRoomId().equals(roomId) && !name.equals(frame.getTitle()))
                             {
                                 objChatRooms.get(i).addList(name);
+                                objChatRooms.get(i).setVisible(true);
+                                objChatRooms.get(i).setState(JFrame.NORMAL);
                             }
                         }
                     }

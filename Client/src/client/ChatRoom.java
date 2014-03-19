@@ -64,7 +64,7 @@ public class ChatRoom extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         myList = new javax.swing.JList();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
+        jTextPane2 = new javax.swing.JTextPane();
         jScrollPane7 = new javax.swing.JScrollPane();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -97,9 +97,8 @@ public class ChatRoom extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(jScrollPane4);
 
-        jEditorPane1.setEditable(false);
-        jEditorPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("訊息欄"));
-        jScrollPane5.setViewportView(jEditorPane1);
+        jTextPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("訊息欄"));
+        jScrollPane5.setViewportView(jTextPane2);
 
         jButton1.setText("send");
         jButton1.setToolTipText("");
@@ -405,8 +404,19 @@ public class ChatRoom extends javax.swing.JFrame {
     //userlist function for client
     public void addList (String name)
     {
-        usernames.add(name);
-        model.addElement(name);
+        boolean jump = true;
+        for ( int i = usernames.size() - 1; i >= 0; i--)
+        {
+            if (usernames.get(i).equals(name))
+            {
+                jump = false;
+            }
+        }
+        if (jump)
+        {
+            usernames.add(name);
+            model.addElement(name);
+        }
     }
     
     //to inform client this roomId
@@ -431,9 +441,9 @@ public class ChatRoom extends javax.swing.JFrame {
             @Override
             public void run()
             {
-                String s = jEditorPane1.getText();
+                String s = jTextPane2.getText();
                 s += (text + "\r\n");
-                jEditorPane1.setText(s);
+                jTextPane2.setText(s);
             }
         }
         
@@ -442,7 +452,6 @@ public class ChatRoom extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox invite;
     private javax.swing.JButton jButton1;
-    private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -465,6 +474,7 @@ public class ChatRoom extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane jTextPane2;
     private javax.swing.JList myList;
     // End of variables declaration//GEN-END:variables
 }
