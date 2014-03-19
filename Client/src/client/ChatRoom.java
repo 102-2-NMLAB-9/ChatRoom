@@ -170,7 +170,7 @@ public class ChatRoom extends javax.swing.JFrame {
         jLabel14.setBorder(new javax.swing.border.MatteBorder(null));
         jLabel14.setOpaque(true);
 
-        invite.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "invite all" }));
+        invite.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "invite" }));
         invite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inviteActionPerformed(evt);
@@ -305,7 +305,7 @@ public class ChatRoom extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(this.HIDE_ON_CLOSE);
     }//GEN-LAST:event_formWindowClosing
 
     private void inviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inviteActionPerformed
@@ -317,27 +317,60 @@ public class ChatRoom extends javax.swing.JFrame {
             //TODO:need to fix
             /*
             for ( int i = client.onLineUsers.size() - 1; i >=0; i-- )
-            {
-                sendComboBox(client.onLineUsers.get(i));
+            {           
+                boolean jump = true;
+                for ( int j = usernames.size() - 1; j >= 0; j-- )
+                {
+                    if (client.onLineUsers.get(i).equals(usernames.get(j)))
+                    {
+                        jump = false;
+                    }
+                }
+                if (jump)
+                {
+                    sendComboBox(client.onLineUsers.get(i));
+                }
             }
             for ( int i = client.onLineUsers.size() - 1; i >=0; i-- )
             {
-                usernames.add(client.onLineUsers.get(i));
-                model.addElement(client.onLineUsers.get(i));
+                boolean jump = true;
+                for ( int j = usernames.size() - 1; j >= 0; j-- )
+                {
+                    if (client.onLineUsers.get(i).equals(usernames.get(j)))
+                    {
+                        jump = false;
+                    }
+                }
+                if (jump)
+                {
+                    usernames.add(client.onLineUsers.get(i));
+                    model.addElement(client.onLineUsers.get(i));
+                }
             }
             */
         }
         else
         {
-            sendComboBox(name);
-            usernames.add(name);
-            model.addElement(name);
+            boolean jump = true;
+            for ( int i = usernames.size() - 1; i >= 0; i-- )
+            {
+                if (usernames.get(i).equals(name))
+                {
+                    jump = false;
+                }
+            }
+            if (jump)
+            {
+                sendComboBox(name);
+                usernames.add(name);
+                model.addElement(name);
+            }
         }
     }//GEN-LAST:event_inviteActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        client.sendMessage("ROOMCHAT@" + roomId + "@" + jTextPane1.getText());
+        client.sendMessage("ROOMCHAT@" + roomId + "@" + jTextPane1.getText() + "@" + client.frame.getTitle());
         jTextPane1.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -345,7 +378,7 @@ public class ChatRoom extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (evt.getKeyCode() == KeyEvent.VK_ENTER)
         {
-            client.sendMessage("ROOMCHAT@" + roomId + "@" + jTextPane1.getText());
+            client.sendMessage("ROOMCHAT@" + roomId + "@" + jTextPane1.getText() + "@" + client.frame.getTitle());
             jTextPane1.setText("");
             evt.consume();
         }

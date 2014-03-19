@@ -73,6 +73,11 @@ public class chatRoomQuestion extends javax.swing.JDialog {
         roomId.setText("請輸入房名");
         roomId.setToolTipText("");
         roomId.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        roomId.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                roomIdKeyPressed(evt);
+            }
+        });
 
         jButton1.setText("確定");
         jButton1.setToolTipText("");
@@ -110,6 +115,16 @@ public class chatRoomQuestion extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        judgeRoom();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void roomIdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_roomIdKeyPressed
+        // TODO add your handling code here:
+        judgeRoom();
+    }//GEN-LAST:event_roomIdKeyPressed
+
+    private void judgeRoom ()
+    {
         boolean jump = false;
         for ( int i = client.chatRooms.size() - 1; i >= 0; i-- )
         {
@@ -128,8 +143,7 @@ public class chatRoomQuestion extends javax.swing.JDialog {
             client.chatRooms.add(roomId.getText());
             this.dispose();
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
+    }
     /**
      * @param args the command line arguments
      */

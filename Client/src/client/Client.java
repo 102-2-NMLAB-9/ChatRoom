@@ -292,10 +292,23 @@ public class Client{
                     if (index >= 0) 
                     {
                         Object o = theList.getModel().getElementAt(index);
-                        chatRooms.add(o.toString());
-                        ChatRoom temp = new ChatRoom(o.toString(), client);
-                        objChatRooms.add(temp);
-                        sendMessage("ADDINROOM@" + o.toString() + "@" + frame.getTitle());
+                        boolean jump = true;
+                        for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
+                        {
+                            if (objChatRooms.get(i).returnRoomId().equals(o.toString()))
+                            {
+                                jump = false;
+                                objChatRooms.get(i).setVisible(true);
+                                objChatRooms.get(i).setState(JFrame.NORMAL);
+                            }
+                        }
+                        if (jump)
+                        {
+                            chatRooms.add(o.toString());
+                            ChatRoom temp = new ChatRoom(o.toString(), client);
+                            objChatRooms.add(temp);
+                            sendMessage("ADDINROOM@" + o.toString() + "@" + frame.getTitle());
+                        }
                     }
                 }
             }
@@ -544,12 +557,14 @@ public class Client{
                     else if (command.equals("ROOMCHAT"))
                     {
                         String roomId = stringTokenizer.nextToken();
-                        String text = stringTokenizer.nextToken(); 
+                        String text = stringTokenizer.nextToken();
+                        String speaker = stringTokenizer.nextToken();
                         for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
                         {
                             if (objChatRooms.get(i).returnRoomId().equals(roomId))
                             {
-                                objChatRooms.get(i).addText(text);
+                                String temp = speaker + "說:" + text;
+                                objChatRooms.get(i).addText(temp);
                             }
                         }
                     }

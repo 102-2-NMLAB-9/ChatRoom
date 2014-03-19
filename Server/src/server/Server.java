@@ -412,7 +412,7 @@ public class Server {
                 writer.println(user.getName() + user.getIp() + "連線成功!");  
                 writer.flush();  
                 // 反馈当前在线用户信息  
-                if (clients.size() > 0) {  
+                if (clients.size() > -1) {  
                     String temp = "";  
                     for (int i = clients.size() - 1; i >= 0; i--) {  
                         temp += (clients.get(i).getUser().getName() + "/" + clients  
