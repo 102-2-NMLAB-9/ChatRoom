@@ -31,7 +31,7 @@ public class ChatRoom extends javax.swing.JFrame {
     private Client client;
     private Vector <Integer> pos = new Vector <Integer>();
     private Vector <String> pic = new Vector <String>();
-    private ArrayList<String> usernames = new ArrayList<String>();
+    public ArrayList<String> usernames = new ArrayList<String>();
     private DefaultListModel model = new DefaultListModel();
 
     /**

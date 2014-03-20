@@ -470,11 +470,13 @@ public class Server {
                         for (int i = RoomList.size() - 1; i >= 0; i--)
                         {
                             RoomList.get(i).members.remove(user.getName());
+                            /*
                             if (RoomList.get(i).members.size() == 0)
                             {
                                 listmodel.removeElement(RoomList.get(i).name);
                                 RoomList.remove(i);
                             }
+                            */
                         }
                                                 
                         // 删除此条客户端服务线程  
