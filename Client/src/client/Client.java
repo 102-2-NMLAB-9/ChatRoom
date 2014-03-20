@@ -502,11 +502,13 @@ public class Client{
                         {
                             objChatRooms.get(i).deleteComboBox(username);
                             objChatRooms.get(i).deleteList(username);
+                            /*
                             if (objChatRooms.get(i).usernames.size() == 0)
                             {
                                 listmodel.removeElement(objChatRooms.get(i).returnRoomId());
                                 objChatRooms.remove(i);
                             }
+                            */
                         }
                     } 
                     else if (command.equals("USERLIST"))
