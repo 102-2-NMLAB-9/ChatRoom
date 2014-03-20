@@ -26,6 +26,7 @@ import javax.swing.text.BadLocationException;
  * @author nmlab212
  */
 public class ChatRoom extends javax.swing.JFrame {
+    private ChatRoom chatRoom = this;
     private String roomId;
     //need to pass client in.
     private Client client;
@@ -548,7 +549,8 @@ public class ChatRoom extends javax.swing.JFrame {
                             }                      
                         }
                     }
-                    jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),"\r\n", null);   
+                    jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),"\r\n", null); 
+                    chatRoom.setVisible(true);
                 }
                 catch (BadLocationException e) {
                 }
