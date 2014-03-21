@@ -107,6 +107,11 @@ public class ChatRoom extends javax.swing.JFrame {
 
         jTextPane2.setEditable(false);
         jTextPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("訊息欄"));
+        jTextPane2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextPane2MouseClicked(evt);
+            }
+        });
         jScrollPane5.setViewportView(jTextPane2);
 
         jButton1.setText("send");
@@ -445,6 +450,10 @@ public class ChatRoom extends javax.swing.JFrame {
         pos.add(jTextPane1.getText().toString().length()-1);
         pic.add("|");
     }//GEN-LAST:event_jLabel15MouseClicked
+
+    private void jTextPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextPane2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextPane2MouseClicked
 
     //send message when inviting
     private void sendComboBox (String name)
