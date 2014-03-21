@@ -521,11 +521,17 @@ public class ChatRoom extends javax.swing.JFrame {
                          jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(), array[i], null);
                          jTextPane2.insertIcon(new ImageIcon(getClass().getResource("/picture/wreck-it-ralph-vanellope.jpg"))); 
                     }*/
+                    int pos = 0;
                     StringTokenizer st1= new StringTokenizer(text,"{",true);
                     while(st1.hasMoreTokens()){
                         String s1=st1.nextToken();
                         if(s1.equals("{")) {
                             jTextPane2.insertIcon(new ImageIcon(getClass().getResource("/picture/1.jpg")));  
+                            pos += 7;
+                            if(pos>60) {
+                                jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),"\r\n", null);
+                                pos = 0;
+                            }
                         }
                         else {
                             StringTokenizer st2= new StringTokenizer(s1,"}",true);
@@ -533,6 +539,11 @@ public class ChatRoom extends javax.swing.JFrame {
                                 String s2=st2.nextToken();
                                 if(s2.equals("}")) {
                                     jTextPane2.insertIcon(new ImageIcon(getClass().getResource("/picture/2.jpg")));  
+                                    pos += 7;
+                                    if(pos>60) {
+                                        jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),"\r\n", null);
+                                        pos = 0;
+                                    }                                                                      
                                 }
                                 else {
                                     StringTokenizer st3= new StringTokenizer(s2,"|",true);
@@ -540,9 +551,32 @@ public class ChatRoom extends javax.swing.JFrame {
                                         String s3=st3.nextToken();
                                         if(s3.equals("|")) {
                                             jTextPane2.insertIcon(new ImageIcon(getClass().getResource("/picture/3.jpg")));  
+                                            pos += 7;                                            
+                                            if(pos>60) {
+                                                jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),"\r\n", null);
+                                                pos = 0;
+                                            }                                              
                                         }
-                                        else {
-                                            jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),s3, null);                            
+                                        else {   
+                                            pos += s3.length();
+                                            if(pos>60) {
+                                                int len = s3.length() ;
+                                                int line = 60+s3.length()-pos;
+                                                jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),s3.substring(0,line), null);                                                
+                                                jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),"\r\n", null);          
+                                                len -= line;
+                                                while (len >60) {
+                                                    jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),s3.substring(line,line+60), null);            
+                                                    jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),"\r\n", null);
+                                                    line+=60;
+                                                    len-=60;
+                                                }
+                                                jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),s3.substring(line,line+len), null);     
+                                                pos = len;
+                                            }         
+                                            else {
+                                                jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),s3, null);            
+                                            } 
                                         }
                                     }                            
                                 }
@@ -550,6 +584,7 @@ public class ChatRoom extends javax.swing.JFrame {
                         }
                     }
                     jTextPane2.getDocument().insertString(jTextPane2.getDocument().getLength(),"\r\n", null); 
+                    pos=0;
                     chatRoom.setVisible(true);
                 }
                 catch (BadLocationException e) {
