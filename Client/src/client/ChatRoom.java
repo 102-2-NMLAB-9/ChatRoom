@@ -6,6 +6,7 @@
 
 package client;
 
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -66,6 +67,8 @@ public class ChatRoom extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        UserListPopupMenu = new javax.swing.JPopupMenu();
+        SendFileButton = new javax.swing.JMenuItem();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -93,6 +96,11 @@ public class ChatRoom extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
 
+        UserListPopupMenu.setToolTipText("");
+
+        SendFileButton.setText("SendFile");
+        UserListPopupMenu.add(SendFileButton);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -101,6 +109,14 @@ public class ChatRoom extends javax.swing.JFrame {
         });
 
         myList.setBorder(javax.swing.BorderFactory.createTitledBorder("使用者列表"));
+        myList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                myListMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                myListMouseReleased(evt);
+            }
+        });
         jScrollPane4.setViewportView(myList);
 
         jScrollPane3.setViewportView(jScrollPane4);
@@ -446,6 +462,22 @@ public class ChatRoom extends javax.swing.JFrame {
         pic.add("|");
     }//GEN-LAST:event_jLabel15MouseClicked
 
+    private void myListMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_myListMousePressed
+        // TODO add your handling code here:
+        if( evt.getButton() == MouseEvent.BUTTON2 ) {
+            myList.clearSelection();
+            Rectangle r = UserListPanel.getCellBounds( 0, UserList.size()-1 );
+            if( r!=null && r.contains(evt.getPoint()) ) {
+                    int index = UserListPanel.locationToIndex(evt.getPoint());
+                    UserListPanel.setSelectedIndex(index);
+            };
+        }
+    }//GEN-LAST:event_myListMousePressed
+
+    private void myListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_myListMouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_myListMouseReleased
+
     //send message when inviting
     private void sendComboBox (String name)
     {
@@ -563,6 +595,8 @@ public class ChatRoom extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem SendFileButton;
+    private javax.swing.JPopupMenu UserListPopupMenu;
     private javax.swing.JComboBox invite;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
