@@ -99,6 +99,11 @@ public class ChatRoom extends javax.swing.JFrame {
         UserListPopupMenu.setToolTipText("");
 
         SendFileButton.setText("SendFile");
+        SendFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SendFileButtonActionPerformed(evt);
+            }
+        });
         UserListPopupMenu.add(SendFileButton);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -466,17 +471,26 @@ public class ChatRoom extends javax.swing.JFrame {
         // TODO add your handling code here:
         if( evt.getButton() == MouseEvent.BUTTON2 ) {
             myList.clearSelection();
-            Rectangle r = UserListPanel.getCellBounds( 0, UserList.size()-1 );
+            Rectangle r = myList.getCellBounds( 0, usernames.size()-1 );
             if( r!=null && r.contains(evt.getPoint()) ) {
-                    int index = UserListPanel.locationToIndex(evt.getPoint());
-                    UserListPanel.setSelectedIndex(index);
+                    int index = myList.locationToIndex(evt.getPoint());
+                    myList.setSelectedIndex(index);
             };
         }
     }//GEN-LAST:event_myListMousePressed
 
     private void myListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_myListMouseReleased
         // TODO add your handling code here:
+        if( myList.getSelectedIndex() != -1 && evt.isPopupTrigger() ) {
+            UserListPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+	}
     }//GEN-LAST:event_myListMouseReleased
+
+    private void SendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendFileButtonActionPerformed
+        // TODO add your handling code here:
+        String dest = myList.getSelectedValue().toString();
+        client.sendFile(client.getName(), dest);
+    }//GEN-LAST:event_SendFileButtonActionPerformed
 
     //send message when inviting
     private void sendComboBox (String name)

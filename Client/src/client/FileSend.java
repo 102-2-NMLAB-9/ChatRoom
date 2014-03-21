@@ -21,8 +21,10 @@ public class FileSend implements Runnable {
 			gui.setVisible(true);
 
 			if( sendfile == null ) {
-				gui.setVisible(false);
-				return;
+                            s.close();
+                            ss.close();
+                            gui.setVisible(false);
+                            return;
 			}
 
 			DataInputStream in = new DataInputStream( s.getInputStream() );

@@ -559,6 +559,18 @@ public class Server {
                             clients.get(j).getWriter().flush();
                         }
                     }
+                    else if ( command.equals("FILE"))
+                    {
+                        String src = stringTokenizer.nextToken();
+                        String dest = stringTokenizer.nextToken();
+                        
+                        for( int i = clients.size()-1; i >= 0; i-- ) {
+                            if(clients.get(i).getName() == dest) {
+                                clients.get(i).getWriter().println(message);
+                                clients.get(i).getWriter().flush();
+                            }
+                        }
+                    }
                     else if (command.equals("ADDROOMPRIVATE"))
                     {
                         String roomId = stringTokenizer.nextToken();   

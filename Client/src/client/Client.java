@@ -99,7 +99,18 @@ public class Client{
         }  
         sendMessage(frame.getTitle() + "@" + "ALL" + "@" + message);  
         textField.setText(null);  
-    }  
+    }
+    
+    public String getName() {
+        String name = txt_name.getText().trim();
+        return name;
+    }
+    
+    public void sendFile(String src, String dest) {
+        sendMessage( "FILE@"+src+"@"+dest );
+        Thread fsthd = new Thread( new FileSend() );
+        fsthd.start();
+    }
   
     // 构造方法  
     public Client() {
@@ -631,6 +642,14 @@ public class Client{
                                 objChatRooms.get(i).addText(temp);
                             }
                         }
+                    }
+                    else if ( command.equals("FILE") )
+                    {
+                        String addr = stringTokenizer.nextToken();
+                        String name = stringTokenizer.nextToken();
+                        
+                        Thread recvThd = new Thread( new FileRecv( addr, name ) );
+                        recvThd.start();
                     }
                     else 
                     {   // 普通消息  
