@@ -498,7 +498,7 @@ public class ChatRoom extends javax.swing.JFrame {
     private void SendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendFileButtonActionPerformed
         // TODO add your handling code here:
         String dest = myList.getSelectedValue().toString();
-        client.sendFile(client.getName(), dest);
+        client.sendFile(client.getIP(), dest);
     }//GEN-LAST:event_SendFileButtonActionPerformed
 
     //send message when inviting

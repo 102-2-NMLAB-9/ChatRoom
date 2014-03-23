@@ -392,6 +392,10 @@ public class Client{
             return false;  
         }  
     }  
+    
+    public String getIP() {
+        return socket.getLocalAddress().toString();
+    }
   
     /**  
      * 发送消息  
