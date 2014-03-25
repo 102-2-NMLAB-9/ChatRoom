@@ -683,10 +683,11 @@ public class Client{
                     {
                         String me = stringTokenizer.nextToken();
                         String dest = stringTokenizer.nextToken();
-                        sendMessage("VOICEIP@" + client.getIP() + "@" + dest );
                         ServerSocket serSock=new ServerSocket(6000);
                         VoiceThread voicethread = new VoiceThread(serSock);
                         voicethread.start();
+                        sendMessage("VOICEIP@" + client.getIP() + "@" + dest );
+                        sleep(300);
                         
                         String IP = stringTokenizer.nextToken();
                         try   
