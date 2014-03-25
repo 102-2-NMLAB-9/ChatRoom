@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseAdapter;
+import java.net.ServerSocket;
   
 import javax.swing.DefaultListModel;  
 import javax.swing.JButton;  
@@ -440,7 +441,30 @@ public class Client{
         }  
     }  
   
-    // 不断接收消息的线程  
+    // 不断接收消息的线程 
+    class VoiceThread extends Thread
+    {
+        private ServerSocket serversocket;
+        
+        public VoiceThread( ServerSocket serversocket)
+        {
+            this.serversocket = serversocket;
+        }
+        
+        public void run()
+        {
+            try
+            {
+                Socket cli=serversocket.accept();
+                Playback player=new Playback(cli);
+                player.start();
+            }
+            catch( IOException e )
+            {          
+            }
+        }
+    }
+    
     class MessageThread extends Thread {
         private BufferedReader reader;  
         private JTextArea textArea;  
@@ -654,6 +678,44 @@ public class Client{
                         
                         Thread recvThd = new Thread( new FileRecv( addr, name ) );
                         recvThd.start();
+                    }
+                    else if ( command.equals("VOICE") )
+                    {
+                        String me = stringTokenizer.nextToken();
+                        String dest = stringTokenizer.nextToken();
+                        sendMessage("VOICEIP@" + client.getIP() + "@" + dest );
+                        ServerSocket serSock=new ServerSocket(6000);
+                        VoiceThread voicethread = new VoiceThread(serSock);
+                        voicethread.start();
+                        
+                        String IP = stringTokenizer.nextToken();
+                        try   
+                        {   
+                            Socket cli=new Socket(IP,7000);   
+                            Capture cap=new Capture(cli);   
+                            cap.start();   
+                        }   
+                        catch(Exception e)   
+                        {
+                        }
+                    }
+                    else if ( command.equals("VOICEIP") )
+                    {
+                        ServerSocket serSock=new ServerSocket(7000);
+                        VoiceThread voicethread = new VoiceThread(serSock);
+                        voicethread.start();
+                        
+                        String IP = stringTokenizer.nextToken();
+                        try   
+                        {   
+                            Socket cli=new Socket(IP,6000);   
+                            Capture cap=new Capture(cli);   
+                            cap.start();   
+                        }   
+                        catch(Exception e)   
+                        {
+                        }
+                        
                     }
                     else 
                     {   // 普通消息  

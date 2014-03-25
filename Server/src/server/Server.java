@@ -578,6 +578,31 @@ public class Server {
                         listmodel.addElement(roomId); 
                         RoomList.add(new RoomList(roomId, username));
                     }
+                    else if (command.equals("VOICE"))
+                    {  
+                        String dest = stringTokenizer.nextToken();
+                        for( int i = clients.size()-1; i >= 0; i-- ) 
+                        {
+                            if(clients.get(i).getUser().getName().equals(dest)) 
+                            {
+                                clients.get(i).getWriter().println(message);
+                                clients.get(i).getWriter().flush();
+                            }
+                        }
+                    }
+                    else if (command.equals("VOICEIP"))
+                    {
+                        String IP = stringTokenizer.nextToken();
+                        String dest = stringTokenizer.nextToken();
+                        for( int i = clients.size()-1; i >= 0; i-- ) 
+                        {
+                            if(clients.get(i).getUser().getName().equals(dest)) 
+                            {
+                                clients.get(i).getWriter().println(message);
+                                clients.get(i).getWriter().flush();
+                            }
+                        }
+                    }
                     else 
                     {  
                         dispatcherMessage(message);// 转发消息  

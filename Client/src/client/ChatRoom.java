@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.Socket;
 import javax.swing.JComboBox;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class ChatRoom extends javax.swing.JFrame {
 
         UserListPopupMenu = new javax.swing.JPopupMenu();
         SendFileButton = new javax.swing.JMenuItem();
+        voiceTalkButton = new javax.swing.JMenuItem();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -105,6 +107,14 @@ public class ChatRoom extends javax.swing.JFrame {
             }
         });
         UserListPopupMenu.add(SendFileButton);
+
+        voiceTalkButton.setText("voice talk");
+        voiceTalkButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                voiceTalkButtonActionPerformed(evt);
+            }
+        });
+        UserListPopupMenu.add(voiceTalkButton);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -498,8 +508,16 @@ public class ChatRoom extends javax.swing.JFrame {
     private void SendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendFileButtonActionPerformed
         // TODO add your handling code here:
         String dest = myList.getSelectedValue().toString();
+        dest = dest.trim();
         client.sendFile(client.getIP(), dest);
     }//GEN-LAST:event_SendFileButtonActionPerformed
+
+    private void voiceTalkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voiceTalkButtonActionPerformed
+        // TODO add your handling code here:
+        String dest = myList.getSelectedValue().toString();
+        dest = dest.trim();
+        client.sendMessage( "VOICE@" + dest + "@" + client.frame.getTitle() + "@" + client.getIP() );
+    }//GEN-LAST:event_voiceTalkButtonActionPerformed
 
     //send message when inviting
     private void sendComboBox (String name)
@@ -681,5 +699,6 @@ public class ChatRoom extends javax.swing.JFrame {
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane jTextPane2;
     private javax.swing.JList myList;
+    private javax.swing.JMenuItem voiceTalkButton;
     // End of variables declaration//GEN-END:variables
 }
