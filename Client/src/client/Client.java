@@ -478,7 +478,7 @@ public class Client{
         // 被动的关闭连接  
         public synchronized void closeCon() throws Exception {
             // 清空用户列表  
-            sleep(300);
+            sleep(3000);
             listModel.removeAllElements();
             listmodel.removeAllElements();
             onLineUsers.clear();
@@ -687,7 +687,7 @@ public class Client{
                         VoiceThread voicethread = new VoiceThread(serSock);
                         voicethread.start();
                         sendMessage("VOICEIP@" + client.getIP() + "@" + dest );
-                        sleep(300);
+                        sleep(3000);
                         
                         String IP = stringTokenizer.nextToken();
                         try   
