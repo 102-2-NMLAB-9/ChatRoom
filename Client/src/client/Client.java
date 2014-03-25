@@ -697,6 +697,7 @@ public class Client{
                         }   
                         catch(Exception e)   
                         {
+                            e.printStackTrace();
                         }
                     }
                     else if ( command.equals("VOICEIP") )
@@ -714,6 +715,7 @@ public class Client{
                         }   
                         catch(Exception e)   
                         {
+                            e.printStackTrace();
                         }
                         
                     }
