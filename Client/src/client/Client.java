@@ -28,7 +28,11 @@ import java.util.ArrayList;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseAdapter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
   
 import javax.swing.DefaultListModel;  
 import javax.swing.JButton;  
@@ -109,8 +113,8 @@ public class Client{
         return name;
     }
     
-    public void sendFile(String src, String dest) {
-        sendMessage( "FILE@"+src+"@"+dest );
+    public void sendFile(String dest, String src) {
+        sendMessage( "FILE@"+dest+"@"+src );
         Thread fsthd = new Thread( new FileSend() );
         fsthd.start();
     }
@@ -419,7 +423,15 @@ public class Client{
     }  
     
     public String getIP() {
-        return socket.getLocalAddress().toString();
+        String ipAddress = "";
+        try {
+            //        return socket.getInetAddress().toString();
+            InetAddress IP = InetAddress.getLocalHost();
+            ipAddress  = IP.getHostAddress();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ipAddress;
     }
   
     /**  

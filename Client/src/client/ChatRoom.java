@@ -520,9 +520,8 @@ public class ChatRoom extends javax.swing.JFrame {
 
     private void SendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendFileButtonActionPerformed
         // TODO add your handling code here:
-        String dest = myList.getSelectedValue().toString();
-        dest = dest.trim();
-        client.sendFile(client.getIP(), dest);
+        String src = client.getName();
+        client.sendFile(client.getIP(), src);
     }//GEN-LAST:event_SendFileButtonActionPerformed
 
     private void voiceTalkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voiceTalkButtonActionPerformed
