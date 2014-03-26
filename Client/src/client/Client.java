@@ -489,15 +489,18 @@ public class Client{
         
         public void run()
         {
-            try
+            while(true)
             {
-                Socket cli=serversocket.accept();
-                Playback player=new Playback(cli);
-                player.start();
-            }
-            catch( IOException e )
-            {
-                e.printStackTrace();
+                try
+                {
+                    Socket cli=serversocket.accept();
+                    Playback player=new Playback(cli);
+                    player.start();
+                }
+                catch( IOException e )
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
