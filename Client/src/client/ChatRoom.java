@@ -537,7 +537,10 @@ public class ChatRoom extends javax.swing.JFrame {
         // TODO add your handling code here:
         String dest = myList.getSelectedValue().toString();
         dest = dest.trim();
-        client.sendMessage( "VOICE@" + dest + "@" + client.frame.getTitle() + "@" + client.getIP() );
+        if ( !dest.equals( client.frame.getTitle() ) )
+        {
+            client.sendMessage( "VOICE@" + dest + "@" + client.frame.getTitle() + "@" + client.getIP() );
+        }
     }//GEN-LAST:event_voiceTalkButtonActionPerformed
 
     private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked

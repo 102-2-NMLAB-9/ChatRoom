@@ -738,7 +738,7 @@ public class Client{
                         try   
                         {   
                             Socket cli=new Socket(IP,6000);   
-                            Capture cap=new Capture(cli);   
+                            Capture cap =new Capture(cli);   
                             cap.start();
                         }   
                         catch(Exception e)   
