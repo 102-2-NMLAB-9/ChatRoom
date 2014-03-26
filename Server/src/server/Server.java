@@ -559,6 +559,14 @@ public class Server {
                             clients.get(j).getWriter().flush();
                         }
                     }
+                     else if (command.equals("DING"))
+                    {
+                        for ( int j = clients.size() - 1; j >= 0; j-- )
+                        {
+                            clients.get(j).getWriter().println(message);
+                            clients.get(j).getWriter().flush();
+                        }
+                    }
                     else if ( command.equals("FILE"))
                     {
                         String src = stringTokenizer.nextToken();

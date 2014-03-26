@@ -1,0 +1,197 @@
+[1mdiff --git a/Client/src/client/ChatRoom.form b/Client/src/client/ChatRoom.form[m
+[1mindex bd032da..b08a2c7 100644[m
+[1m--- a/Client/src/client/ChatRoom.form[m
+[1m+++ b/Client/src/client/ChatRoom.form[m
+[36m@@ -473,6 +473,9 @@[m
+                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">[m
+                   <Color blue="0" green="0" red="0" type="rgb"/>[m
+                 </Property>[m
+[32m+[m[32m                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">[m
+[32m+[m[32m                  <Image iconType="3" name="/picture/4.jpg"/>[m
+[32m+[m[32m                </Property>[m
+                 <Property name="toolTipText" type="java.lang.String" value=""/>[m
+                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">[m
+                   <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">[m
+[36m@@ -481,6 +484,9 @@[m
+                 </Property>[m
+                 <Property name="opaque" type="boolean" value="true"/>[m
+               </Properties>[m
+[32m+[m[32m              <Events>[m
+[32m+[m[32m                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel16MouseClicked"/>[m
+[32m+[m[32m              </Events>[m
+             </Component>[m
+             <Component class="javax.swing.JLabel" name="jLabel15">[m
+               <Properties>[m
+[1mdiff --git a/Client/src/client/ChatRoom.java b/Client/src/client/ChatRoom.java[m
+[1mindex f7e1b11..1c85c5b 100644[m
+[1m--- a/Client/src/client/ChatRoom.java[m
+[1m+++ b/Client/src/client/ChatRoom.java[m
+[36m@@ -6,17 +6,24 @@[m
+ [m
+ package client;[m
+ [m
+[32m+[m[32mimport java.applet.Applet;[m
+[32m+[m[32mimport java.applet.AudioClip;[m
+ import java.awt.Rectangle;[m
+ import java.awt.Toolkit;[m
+ import java.awt.event.KeyEvent;[m
+ import java.awt.event.MouseAdapter;[m
+ import java.awt.event.MouseEvent;[m
+[32m+[m[32mimport static java.lang.Thread.sleep;[m
+ import java.net.Socket;[m
+[32m+[m[32mimport java.net.URL;[m
+ import javax.swing.JComboBox;[m
+ import javax.swing.WindowConstants;[m
+ import java.util.ArrayList;[m
+ import java.util.StringTokenizer;[m
+ import java.util.Vector;[m
+[32m+[m[32mimport java.util.logging.Level;[m
+[32m+[m[32mimport java.util.logging.Logger;[m
+[32m+[m[32mimport javax.sound.sampled.AudioSystem;[m
+ import javax.swing.DefaultListModel;[m
+ import javax.swing.ImageIcon;[m
+ import javax.swing.JTextPane;[m
+[36m@@ -232,9 +239,15 @@[m [mpublic class ChatRoom extends javax.swing.JFrame {[m
+         jScrollPane1.setViewportView(jTextPane1);[m
+ [m
+         jLabel16.setBackground(new java.awt.Color(0, 0, 0));[m
+[32m+[m[32m        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/4.jpg"))); // NOI18N[m
+         jLabel16.setToolTipText("");[m
+         jLabel16.setBorder(new javax.swing.border.MatteBorder(null));[m
+         jLabel16.setOpaque(true);[m
+[32m+[m[32m        jLabel16.addMouseListener(new java.awt.event.MouseAdapter() {[m
+[32m+[m[32m            public void mouseClicked(java.awt.event.MouseEvent evt) {[m
+[32m+[m[32m                jLabel16MouseClicked(evt);[m
+[32m+[m[32m            }[m
+[32m+[m[32m        });[m
+ [m
+         jLabel15.setBackground(new java.awt.Color(0, 0, 0));[m
+         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/3.jpg"))); // NOI18N[m
+[36m@@ -519,6 +532,10 @@[m [mpublic class ChatRoom extends javax.swing.JFrame {[m
+         client.sendMessage( "VOICE@" + dest + "@" + client.frame.getTitle() + "@" + client.getIP() );[m
+     }//GEN-LAST:event_voiceTalkButtonActionPerformed[m
+ [m
+[32m+[m[32m    private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked[m
+[32m+[m[32m        client.sendMessage( "DING@" + roomId + "@" + " " + "@" + client.frame.getTitle()  );[m
+[32m+[m[32m    }//GEN-LAST:event_jLabel16MouseClicked[m
+[32m+[m
+     //send message when inviting[m
+     private void sendComboBox (String name)[m
+     {[m
+[36m@@ -574,7 +591,60 @@[m [mpublic class ChatRoom extends javax.swing.JFrame {[m
+     /**[m
+      * @param args the command line arguments[m
+      */[m
+[31m-[m
+[32m+[m[32m    public void ding()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        class temp2 implements Runnable[m
+[32m+[m[32m        {[m
+[32m+[m[32m            int screen_width = Toolkit.getDefaultToolkit().getScreenSize().width;[m[41m  [m
+[32m+[m[32m            int screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;[m[41m  [m
+[32m+[m[32m            @Override[m[41m            [m
+[32m+[m[32m            public void run()[m
+[32m+[m[32m            {[m
+[32m+[m[32m                chatRoom.setVisible(true);[m
+[32m+[m[32m                try {[m
+[32m+[m[32m                    sleep(115);[m
+[32m+[m[32m                } catch (InterruptedException ex) {[m
+[32m+[m[32m                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);[m
+[32m+[m[32m                }[m
+[32m+[m[32m                chatRoom.setVisible(false);[m
+[32m+[m[32m                try {[m
+[32m+[m[32m                    sleep(115);[m
+[32m+[m[32m                } catch (InterruptedException ex) {[m
+[32m+[m[32m                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);[m
+[32m+[m[32m                }[m
+[32m+[m[32m                setLocation((screen_width - getWidth()) / 2 + 50 ,(screen_height - getHeight()) / 2 + 50);[m[41m                [m
+[32m+[m[32m                chatRoom.setVisible(true);[m
+[32m+[m[32m                try {[m
+[32m+[m[32m                    sleep(115);[m
+[32m+[m[32m                } catch (InterruptedException ex) {[m
+[32m+[m[32m                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);[m
+[32m+[m[32m                }[m
+[32m+[m[32m                chatRoom.setVisible(false);[m
+[32m+[m[32m                try {[m
+[32m+[m[32m                    sleep(115);[m
+[32m+[m[32m                } catch (InterruptedException ex) {[m
+[32m+[m[32m                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);[m
+[32m+[m[32m                }[m
+[32m+[m[32m                setLocation((screen_width - getWidth()) / 2 - 50 ,(screen_height - getHeight()) / 2 - 50);[m[41m                [m
+[32m+[m[32m                chatRoom.setVisible(true);[m[41m [m
+[32m+[m[32m                try {[m
+[32m+[m[32m                    sleep(115);[m
+[32m+[m[32m                } catch (InterruptedException ex) {[m
+[32m+[m[32m                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);[m
+[32m+[m[32m                }[m
+[32m+[m[32m                chatRoom.setVisible(false);[m
+[32m+[m[32m                try {[m
+[32m+[m[32m                    sleep(115);[m
+[32m+[m[32m                } catch (InterruptedException ex) {[m
+[32m+[m[32m                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);[m
+[32m+[m[32m                }[m
+[32m+[m[32m                setLocation((screen_width - getWidth()) / 2 ,(screen_height - getHeight()) / 2 );[m[41m                [m
+[32m+[m[32m                chatRoom.setVisible(true);[m[41m [m
+[32m+[m[32m           }[m
+[32m+[m[32m        }[m
+[32m+[m[32m        SwingUtilities.invokeLater(new temp2());[m
+[32m+[m[32m    }[m
+[32m+[m[41m    [m
+     public void addText(String text)[m
+     {[m
+         class temp implements Runnable[m
+[36m@@ -663,8 +733,7 @@[m [mpublic class ChatRoom extends javax.swing.JFrame {[m
+                 catch (BadLocationException e) {[m
+                 }[m
+             }[m
+[31m-        }[m
+[31m-        [m
+[32m+[m[32m        }[m[41m       [m
+         SwingUtilities.invokeLater(new temp(text));[m
+     }[m
+     [m
+[1mdiff --git a/Client/src/client/Client.java b/Client/src/client/Client.java[m
+[1mindex adaa581..cf0d66f 100644[m
+[1m--- a/Client/src/client/Client.java[m
+[1m+++ b/Client/src/client/Client.java[m
+[36m@@ -671,6 +671,19 @@[m [mpublic class Client{[m
+                             }[m
+                         }[m
+                     }[m
+[32m+[m[32m                    else if (command.equals("DING"))[m
+[32m+[m[32m                    {[m
+[32m+[m[32m                        String roomId = stringTokenizer.nextToken();[m
+[32m+[m[32m                        String text = stringTokenizer.nextToken();[m
+[32m+[m[32m                        String speaker = stringTokenizer.nextToken();[m
+[32m+[m[32m                        for ( int i = objChatRooms.size() - 1; i >= 0; i-- )[m
+[32m+[m[32m                        {[m
+[32m+[m[32m                            if (objChatRooms.get(i).returnRoomId().equals(roomId))[m
+[32m+[m[32m                            {[m
+[32m+[m[32m                                objChatRooms.get(i).ding();[m
+[32m+[m[32m                            }[m
+[32m+[m[32m                        }[m
+[32m+[m[32m                    }[m[41m                    [m
+                     else if ( command.equals("FILE") )[m
+                     {[m
+                         String addr = stringTokenizer.nextToken();[m
+[1mdiff --git a/Server/src/server/Server.java b/Server/src/server/Server.java[m
+[1mindex a5855c9..2724601 100644[m
+[1m--- a/Server/src/server/Server.java[m
+[1m+++ b/Server/src/server/Server.java[m
+[36m@@ -559,6 +559,14 @@[m [mpublic class Server {[m
+                             clients.get(j).getWriter().flush();[m
+                         }[m
+                     }[m
+[32m+[m[32m                     else if (command.equals("DING"))[m
+[32m+[m[32m                    {[m
+[32m+[m[32m                        for ( int j = clients.size() - 1; j >= 0; j-- )[m
+[32m+[m[32m                        {[m
+[32m+[m[32m                            clients.get(j).getWriter().println(message);[m
+[32m+[m[32m                            clients.get(j).getWriter().flush();[m
+[32m+[m[32m                        }[m
+[32m+[m[32m                    }[m
+                     else if ( command.equals("FILE"))[m
+                     {[m
+                         String src = stringTokenizer.nextToken();[m
+warning: LF will be replaced by CRLF in Client/src/client/ChatRoom.form.
+The file will have its original line endings in your working directory.

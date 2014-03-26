@@ -6,17 +6,24 @@
 
 package client;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import static java.lang.Thread.sleep;
 import java.net.Socket;
+import java.net.URL;
 import javax.swing.JComboBox;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.sampled.AudioSystem;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextPane;
@@ -232,9 +239,15 @@ public class ChatRoom extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextPane1);
 
         jLabel16.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/4.jpg"))); // NOI18N
         jLabel16.setToolTipText("");
         jLabel16.setBorder(new javax.swing.border.MatteBorder(null));
         jLabel16.setOpaque(true);
+        jLabel16.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel16MouseClicked(evt);
+            }
+        });
 
         jLabel15.setBackground(new java.awt.Color(0, 0, 0));
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/3.jpg"))); // NOI18N
@@ -519,6 +532,10 @@ public class ChatRoom extends javax.swing.JFrame {
         client.sendMessage( "VOICE@" + dest + "@" + client.frame.getTitle() + "@" + client.getIP() );
     }//GEN-LAST:event_voiceTalkButtonActionPerformed
 
+    private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked
+        client.sendMessage( "DING@" + roomId + "@" + " " + "@" + client.frame.getTitle()  );
+    }//GEN-LAST:event_jLabel16MouseClicked
+
     //send message when inviting
     private void sendComboBox (String name)
     {
@@ -574,7 +591,60 @@ public class ChatRoom extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-
+    public void ding()
+    {
+        class temp2 implements Runnable
+        {
+            int screen_width = Toolkit.getDefaultToolkit().getScreenSize().width;  
+            int screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;  
+            @Override            
+            public void run()
+            {
+                chatRoom.setVisible(true);
+                try {
+                    sleep(115);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                chatRoom.setVisible(false);
+                try {
+                    sleep(115);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                setLocation((screen_width - getWidth()) / 2 + 50 ,(screen_height - getHeight()) / 2 + 50);                
+                chatRoom.setVisible(true);
+                try {
+                    sleep(115);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                chatRoom.setVisible(false);
+                try {
+                    sleep(115);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                setLocation((screen_width - getWidth()) / 2 - 50 ,(screen_height - getHeight()) / 2 - 50);                
+                chatRoom.setVisible(true); 
+                try {
+                    sleep(115);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                chatRoom.setVisible(false);
+                try {
+                    sleep(115);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                setLocation((screen_width - getWidth()) / 2 ,(screen_height - getHeight()) / 2 );                
+                chatRoom.setVisible(true); 
+           }
+        }
+        SwingUtilities.invokeLater(new temp2());
+    }
+    
     public void addText(String text)
     {
         class temp implements Runnable
@@ -663,8 +733,7 @@ public class ChatRoom extends javax.swing.JFrame {
                 catch (BadLocationException e) {
                 }
             }
-        }
-        
+        }       
         SwingUtilities.invokeLater(new temp(text));
     }
     

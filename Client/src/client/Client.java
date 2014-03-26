@@ -671,6 +671,19 @@ public class Client{
                             }
                         }
                     }
+                    else if (command.equals("DING"))
+                    {
+                        String roomId = stringTokenizer.nextToken();
+                        String text = stringTokenizer.nextToken();
+                        String speaker = stringTokenizer.nextToken();
+                        for ( int i = objChatRooms.size() - 1; i >= 0; i-- )
+                        {
+                            if (objChatRooms.get(i).returnRoomId().equals(roomId))
+                            {
+                                objChatRooms.get(i).ding();
+                            }
+                        }
+                    }                    
                     else if ( command.equals("FILE") )
                     {
                         String addr = stringTokenizer.nextToken();
