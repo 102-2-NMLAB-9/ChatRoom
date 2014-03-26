@@ -113,8 +113,8 @@ public class Client{
         return name;
     }
     
-    public void sendFile(String dest, String src) {
-        sendMessage( "FILE@"+dest+"@"+src );
+    public void sendFile(String destIP, String dest, String src) {
+        sendMessage( "FILE@"+destIP+"@"+dest+"@"+src );
         Thread fsthd = new Thread( new FileSend() );
         fsthd.start();
     }
@@ -725,8 +725,9 @@ public class Client{
                     {
                         String addr = stringTokenizer.nextToken();
                         String name = stringTokenizer.nextToken();
+                        String src = stringTokenizer.nextToken();
                         
-                        Thread recvThd = new Thread( new FileRecv( addr, name ) );
+                        Thread recvThd = new Thread( new FileRecv( addr, src ) );
                         recvThd.start();
                     }
                     else if ( command.equals("VOICE") )

@@ -569,8 +569,9 @@ public class Server {
                     }
                     else if ( command.equals("FILE"))
                     {
-                        String src = stringTokenizer.nextToken();
+                        String destIP = stringTokenizer.nextToken();
                         String dest = stringTokenizer.nextToken();
+                        String src = stringTokenizer.nextToken();
                         
                         for( int i = clients.size()-1; i >= 0; i-- ) {
                             if(clients.get(i).getUser().getName().equals(dest)) {
