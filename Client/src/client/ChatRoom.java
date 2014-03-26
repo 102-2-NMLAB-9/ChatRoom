@@ -649,7 +649,7 @@ public class ChatRoom extends javax.swing.JFrame {
                     }
                     setLocation((screen_width - getWidth()) / 2 ,(screen_height - getHeight()) / 2 );
                     chatRoom.setVisible(true);
-                    File file = new File("C:\\Users\\nmlab211\\EXP1\\ChatRoom\\Client\\src\\picture\\6.wav");
+                    File file = new File("..\\Client\\src\\picture\\6.wav");
                     AudioInputStream sound = AudioSystem.getAudioInputStream(file);
                     DataLine.Info info = new DataLine.Info(Clip.class,sound.getFormat());
                     Clip player = (Clip)AudioSystem.getLine(info);
