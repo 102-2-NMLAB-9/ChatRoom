@@ -80,9 +80,7 @@ public class Client{
     public ArrayList<String> chatRooms = new ArrayList<String>();
     public ArrayList<ChatRoom> objChatRooms = new ArrayList<ChatRoom>();
     private ServerSocket serSock;
-    private ServerSocket serSock1;
     private VoiceThread voicethread;
-    private VoiceThread voicethread1;
   
     // 主方法,程序入口  
     public static void main(String[] args) {  
@@ -185,7 +183,6 @@ public class Client{
         try
         {
             serSock = new ServerSocket(6000);
-            serSock1 = new ServerSocket(7000);
         }
         catch(IOException e)
         {
@@ -193,9 +190,7 @@ public class Client{
         }
         
         voicethread = new VoiceThread(serSock);
-        voicethread1 = new VoiceThread(serSock1);
         voicethread.start();
-        voicethread1.start();
   
         // 写消息的文本框中按回车键时事件  
         textField.addActionListener(new ActionListener() {  
@@ -307,11 +302,9 @@ public class Client{
                     closeConnection();// 关闭连接  
                 }
                 voicethread.stop();
-                voicethread1.stop();
                 try
                 {
                     serSock.close();
-                    serSock1.close();
                 }
                 catch (IOException a)
                 {
@@ -748,7 +741,7 @@ public class Client{
                         String IP = stringTokenizer.nextToken();
                         try   
                         {   
-                            Socket cli=new Socket(IP,7000);   
+                            Socket cli=new Socket(IP,6000);   
                             Capture cap=new Capture(cli);   
                             cap.start();   
                         }   
@@ -756,6 +749,7 @@ public class Client{
                         {
                             e.printStackTrace();
                         }
+                        
                     }
                     else 
                     {   // 普通消息  
