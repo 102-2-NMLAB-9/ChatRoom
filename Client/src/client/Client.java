@@ -79,6 +79,8 @@ public class Client{
     public ArrayList<String> onLineUsers = new ArrayList<String>();// 所有在线用户
     public ArrayList<String> chatRooms = new ArrayList<String>();
     public ArrayList<ChatRoom> objChatRooms = new ArrayList<ChatRoom>();
+    private ServerSocket serSock;
+    private VoiceThread voicethread;
   
     // 主方法,程序入口  
     public static void main(String[] args) {  
@@ -177,6 +179,18 @@ public class Client{
         frame.setLocation((screen_width - frame.getWidth()) / 2,  
                 (screen_height - frame.getHeight()) / 2);  
         frame.setVisible(true);
+        
+        try
+        {
+            serSock = new ServerSocket(6000);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        
+        voicethread = new VoiceThread(serSock);
+        voicethread.start();
   
         // 写消息的文本框中按回车键时事件  
         textField.addActionListener(new ActionListener() {  
@@ -287,6 +301,16 @@ public class Client{
                 if (isConnected) {  
                     closeConnection();// 关闭连接  
                 }
+                voicethread.stop();
+                try
+                {
+                    serSock.close();
+                }
+                catch (IOException a)
+                {
+                    a.printStackTrace();
+                }
+                
                 System.exit(0);// 退出程序  
             }  
         });  
@@ -446,7 +470,7 @@ public class Client{
     {
         private ServerSocket serversocket;
         
-        public VoiceThread( ServerSocket serversocket)
+        public VoiceThread( ServerSocket serversocket )
         {
             this.serversocket = serversocket;
         }
@@ -460,7 +484,8 @@ public class Client{
                 player.start();
             }
             catch( IOException e )
-            {          
+            {
+                e.printStackTrace();
             }
         }
     }
@@ -696,18 +721,14 @@ public class Client{
                     {
                         String me = stringTokenizer.nextToken();
                         String dest = stringTokenizer.nextToken();
-                        ServerSocket serSock=new ServerSocket(6000);
-                        VoiceThread voicethread = new VoiceThread(serSock);
-                        voicethread.start();
                         sendMessage("VOICEIP@" + client.getIP() + "@" + dest );
-                        sleep(3000);
                         
                         String IP = stringTokenizer.nextToken();
                         try   
                         {   
-                            Socket cli=new Socket(IP,7000);   
+                            Socket cli=new Socket(IP,6000);   
                             Capture cap=new Capture(cli);   
-                            cap.start();   
+                            cap.start();
                         }   
                         catch(Exception e)   
                         {
@@ -715,11 +736,7 @@ public class Client{
                         }
                     }
                     else if ( command.equals("VOICEIP") )
-                    {
-                        ServerSocket serSock=new ServerSocket(7000);
-                        VoiceThread voicethread = new VoiceThread(serSock);
-                        voicethread.start();
-                        
+                    {         
                         String IP = stringTokenizer.nextToken();
                         try   
                         {   
