@@ -503,7 +503,7 @@ public class Client{
         // 被动的关闭连接  
         public synchronized void closeCon() throws Exception {
             // 清空用户列表  
-            sleep(3000);
+            sleep(300);
             listModel.removeAllElements();
             listmodel.removeAllElements();
             onLineUsers.clear();
@@ -721,7 +721,6 @@ public class Client{
                     {
                         String me = stringTokenizer.nextToken();
                         String dest = stringTokenizer.nextToken();
-                        sendMessage("VOICEIP@" + client.getIP() + "@" + dest );
                         
                         String IP = stringTokenizer.nextToken();
                         try   
@@ -734,6 +733,8 @@ public class Client{
                         {
                             e.printStackTrace();
                         }
+                        
+                        sendMessage("VOICEIP@" + client.getIP() + "@" + dest );
                     }
                     else if ( command.equals("VOICEIP") )
                     {         
