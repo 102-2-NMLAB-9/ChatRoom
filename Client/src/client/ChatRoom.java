@@ -8,11 +8,14 @@ package client;
 
 import java.applet.Applet;
 import java.applet.AudioClip;
+import static java.awt.PageAttributes.MediaType.C;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.net.Socket;
 import java.net.URL;
@@ -23,7 +26,12 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextPane;
@@ -599,46 +607,60 @@ public class ChatRoom extends javax.swing.JFrame {
             @Override            
             public void run()
             {
-                chatRoom.setVisible(true);
                 try {
-                    sleep(115);
-                } catch (InterruptedException ex) {
+                    chatRoom.setVisible(true);
+                    try {
+                        sleep(115);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    chatRoom.setVisible(false);
+                    try {
+                        sleep(115);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    setLocation((screen_width - getWidth()) / 2 + 50 ,(screen_height - getHeight()) / 2 + 50);
+                    chatRoom.setVisible(true);
+                    try {
+                        sleep(115);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    chatRoom.setVisible(false);
+                    try {
+                        sleep(115);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    setLocation((screen_width - getWidth()) / 2 - 50 ,(screen_height - getHeight()) / 2 - 50);
+                    chatRoom.setVisible(true);
+                    try {
+                        sleep(115);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    chatRoom.setVisible(false);
+                    try {
+                        sleep(115);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    setLocation((screen_width - getWidth()) / 2 ,(screen_height - getHeight()) / 2 );
+                    chatRoom.setVisible(true);
+                    File file = new File("C:\\Users\\nmlab211\\EXP1\\ChatRoom\\Client\\src\\picture\\6.wav");
+                    AudioInputStream sound = AudioSystem.getAudioInputStream(file);
+                    DataLine.Info info = new DataLine.Info(Clip.class,sound.getFormat());
+                    Clip player = (Clip)AudioSystem.getLine(info);
+                    player.open(sound);
+                    player.start();
+                } catch (LineUnavailableException ex) {
+                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedAudioFileException ex) {
                     Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                chatRoom.setVisible(false);
-                try {
-                    sleep(115);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                setLocation((screen_width - getWidth()) / 2 + 50 ,(screen_height - getHeight()) / 2 + 50);                
-                chatRoom.setVisible(true);
-                try {
-                    sleep(115);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                chatRoom.setVisible(false);
-                try {
-                    sleep(115);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                setLocation((screen_width - getWidth()) / 2 - 50 ,(screen_height - getHeight()) / 2 - 50);                
-                chatRoom.setVisible(true); 
-                try {
-                    sleep(115);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                chatRoom.setVisible(false);
-                try {
-                    sleep(115);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ChatRoom.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                setLocation((screen_width - getWidth()) / 2 ,(screen_height - getHeight()) / 2 );                
-                chatRoom.setVisible(true); 
            }
         }
         SwingUtilities.invokeLater(new temp2());
