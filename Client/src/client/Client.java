@@ -85,6 +85,8 @@ public class Client{
     public ArrayList<ChatRoom> objChatRooms = new ArrayList<ChatRoom>();
     private ServerSocket serSock;
     private VoiceThread voicethread;
+    private Playback playback;
+    private Capture capture;
   
     // 主方法,程序入口  
     public static void main(String[] args) {  
@@ -305,6 +307,14 @@ public class Client{
                 if (isConnected) {  
                     closeConnection();// 关闭连接  
                 }
+                if (playback != null)
+                {
+                    playback.stop();
+                }
+                if (capture != null)
+                {
+                    capture.stop();
+                }
                 voicethread.stop();
                 try
                 {
@@ -494,8 +504,8 @@ public class Client{
                 try
                 {
                     Socket cli=serversocket.accept();
-                    Playback player=new Playback(cli);
-                    player.start();
+                    playback = new Playback(cli);
+                    playback.start();
                 }
                 catch( IOException e )
                 {
@@ -735,22 +745,29 @@ public class Client{
                     }
                     else if ( command.equals("VOICE") )
                     {
-                        String me = stringTokenizer.nextToken();
-                        String dest = stringTokenizer.nextToken();
-                        
-                        String IP = stringTokenizer.nextToken();
-                        try   
-                        {   
-                            Socket cli=new Socket(IP,6000);   
-                            Capture cap =new Capture(cli);   
-                            cap.start();
-                        }   
-                        catch(Exception e)   
+                        if (capture == null)
                         {
-                            e.printStackTrace();
+                            String me = stringTokenizer.nextToken();
+                            String dest = stringTokenizer.nextToken();
+
+                            String IP = stringTokenizer.nextToken();
+                            try   
+                            {   
+                                Socket cli=new Socket(IP,6000);   
+                                capture =new Capture(cli);   
+                                capture.start();
+                            }   
+                            catch(Exception e)   
+                            {
+                                e.printStackTrace();
+                            }
+
+                            sendMessage("VOICEIP@" + client.getIP() + "@" + dest );
                         }
-                        
-                        sendMessage("VOICEIP@" + client.getIP() + "@" + dest );
+                        else
+                        {
+                            sendMessage("VOICECANT@ + dest");
+                        }
                     }
                     else if ( command.equals("VOICEIP") )
                     {         
@@ -758,14 +775,19 @@ public class Client{
                         try   
                         {   
                             Socket cli=new Socket(IP,6000);   
-                            Capture cap=new Capture(cli);   
-                            cap.start();   
+                            capture=new Capture(cli);   
+                            capture.start();   
                         }   
                         catch(Exception e)   
                         {
                             e.printStackTrace();
                         }
                         
+                    }
+                    else if ( command.equals("VOICECANT") )
+                    {
+                        JOptionPane.showMessageDialog(null, "對方正在語音通話中",  
+                            "Error", JOptionPane.ERROR_MESSAGE);
                     }
                     else 
                     {   // 普通消息  

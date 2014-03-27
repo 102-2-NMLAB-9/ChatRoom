@@ -34,6 +34,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
@@ -541,6 +542,11 @@ public class ChatRoom extends javax.swing.JFrame {
         if ( !dest.equals( client.frame.getTitle() ) )
         {
             client.sendMessage( "VOICE@" + dest + "@" + client.frame.getTitle() + "@" + client.getIP() );
+        }
+        else
+        {
+             JOptionPane.showMessageDialog(null, "不能跟自己語音通話",  
+                            "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_voiceTalkButtonActionPerformed
 
