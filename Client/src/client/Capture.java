@@ -70,7 +70,6 @@ class Capture implements Runnable {
            line = null;
 
            try {
-               captrueOutputStream.flush();
                captrueOutputStream.close();
            } catch (IOException ex) {
                ex.printStackTrace();

@@ -643,7 +643,9 @@ public class Server {
                     }  
                 } catch (IOException e) {  
                     e.printStackTrace();  
-                }  
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                } 
             }  
         }  
   

@@ -796,8 +796,8 @@ public class Client{
                     }
                     else if ( command.equals("DISABLEVOICE") )
                     {
-                        capture.stop();
                         playback.stop();
+                        capture.stop();
                         capture = null;
                         playback = null;
                         player = null;
