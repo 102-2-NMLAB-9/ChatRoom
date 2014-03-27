@@ -579,7 +579,7 @@ public class ChatRoom extends javax.swing.JFrame {
         }
         else
         {
-            client.sendMessage( "DISABLE@" + dest + "@" + client.frame.getTitle() );
+            client.sendMessage( "DISABLEVOICE@" + dest + "@" + client.frame.getTitle() );
         }
     }//GEN-LAST:event_disableVoiceActionPerformed
 
