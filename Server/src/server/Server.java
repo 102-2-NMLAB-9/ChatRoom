@@ -624,6 +624,19 @@ public class Server {
                             }
                         }
                     }
+                    else if (command.equals("DISABLEVOICE"))
+                    {
+                        String dest = stringTokenizer.nextToken();
+                        String me = stringTokenizer.nextToken();
+                        for( int i = clients.size()-1; i >= 0; i-- ) 
+                        {
+                            if( clients.get(i).getUser().getName().equals(dest) || clients.get(i).getUser().getName().equals(me) ) 
+                            {
+                                clients.get(i).getWriter().println(message);
+                                clients.get(i).getWriter().flush();
+                            }
+                        }
+                    }
                     else 
                     {  
                         dispatcherMessage(message);// 转发消息  

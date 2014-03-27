@@ -87,6 +87,8 @@ public class Client{
     private VoiceThread voicethread;
     private Playback playback;
     private Capture capture;
+    private Socket cli;
+    public String player;
   
     // 主方法,程序入口  
     public static void main(String[] args) {  
@@ -747,21 +749,22 @@ public class Client{
                     {
                         String me = stringTokenizer.nextToken();
                         String dest = stringTokenizer.nextToken();
+                        String IP = stringTokenizer.nextToken();
                         if (capture == null)
                         {
-                            String IP = stringTokenizer.nextToken();
                             try   
                             {   
-                                Socket cli=new Socket(IP,6000);   
+                                cli=new Socket(IP,6000);   
                                 capture =new Capture(cli);   
                                 capture.start();
+                                player = dest;
                             }   
                             catch(Exception e)   
                             {
                                 e.printStackTrace();
                             }
 
-                            sendMessage("VOICEIP@" + client.getIP() + "@" + dest );
+                            sendMessage("VOICEIP@" + client.getIP() + "@" + dest + "@" + frame.getTitle() );
                         }
                         else
                         {
@@ -771,11 +774,14 @@ public class Client{
                     else if ( command.equals("VOICEIP") )
                     {         
                         String IP = stringTokenizer.nextToken();
+                        String me = stringTokenizer.nextToken();
+                        String dest = stringTokenizer.nextToken();
                         try   
                         {   
-                            Socket cli=new Socket(IP,6000);   
+                            cli=new Socket(IP,6000);   
                             capture=new Capture(cli);   
                             capture.start();   
+                            player = dest;
                         }   
                         catch(Exception e)   
                         {
@@ -787,6 +793,16 @@ public class Client{
                     {
                         JOptionPane.showMessageDialog(null, "對方正在語音通話中",  
                             "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else if ( command.equals("DISABLEVOICE") )
+                    {
+                        capture.stop();
+                        playback.stop();
+                        capture = null;
+                        playback = null;
+                        player = null;
+                        cli.close();
+                        cli = null;
                     }
                     else 
                     {   // 普通消息  

@@ -87,6 +87,7 @@ public class ChatRoom extends javax.swing.JFrame {
         UserListPopupMenu = new javax.swing.JPopupMenu();
         SendFileButton = new javax.swing.JMenuItem();
         voiceTalkButton = new javax.swing.JMenuItem();
+        disableVoice = new javax.swing.JMenuItem();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -131,6 +132,14 @@ public class ChatRoom extends javax.swing.JFrame {
             }
         });
         UserListPopupMenu.add(voiceTalkButton);
+
+        disableVoice.setText("disable voice talk");
+        disableVoice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                disableVoiceActionPerformed(evt);
+            }
+        });
+        UserListPopupMenu.add(disableVoice);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -554,6 +563,26 @@ public class ChatRoom extends javax.swing.JFrame {
         client.sendMessage( "DING@" + roomId + "@" + " " + "@" + client.frame.getTitle()  );
     }//GEN-LAST:event_jLabel16MouseClicked
 
+    private void disableVoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disableVoiceActionPerformed
+        // TODO add your handling code here:
+        String dest = myList.getSelectedValue().toString();
+        dest = dest.trim();
+        if ( dest.equals( client.frame.getTitle() ) )
+        {
+            JOptionPane.showMessageDialog(null, "沒事不要和自己斷線",  
+                            "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else if ( client.player == null || !client.player.equals(dest) )
+        {
+             JOptionPane.showMessageDialog(null, "你沒有和這個人連線",  
+                            "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else
+        {
+            client.sendMessage( "DISABLE@" + dest + "@" + client.frame.getTitle() );
+        }
+    }//GEN-LAST:event_disableVoiceActionPerformed
+
     //send message when inviting
     private void sendComboBox (String name)
     {
@@ -774,6 +803,7 @@ public class ChatRoom extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem SendFileButton;
     private javax.swing.JPopupMenu UserListPopupMenu;
+    private javax.swing.JMenuItem disableVoice;
     private javax.swing.JComboBox invite;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
