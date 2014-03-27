@@ -548,14 +548,19 @@ public class ChatRoom extends javax.swing.JFrame {
         // TODO add your handling code here:
         String dest = myList.getSelectedValue().toString();
         dest = dest.trim();
-        if ( !dest.equals( client.frame.getTitle() ) )
+        if ( client.player != null )
         {
-            client.sendMessage( "VOICE@" + dest + "@" + client.frame.getTitle() + "@" + client.getIP() );
+            JOptionPane.showMessageDialog(null, "你在跟別人通話中，別重啟通話",  
+                            "Error", JOptionPane.ERROR_MESSAGE);
         }
-        else
+        else if ( dest.equals( client.frame.getTitle() ) )
         {
              JOptionPane.showMessageDialog(null, "不能跟自己語音通話",  
                             "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else
+        {
+            client.sendMessage( "VOICE@" + dest + "@" + client.frame.getTitle() + "@" + client.getIP() );
         }
     }//GEN-LAST:event_voiceTalkButtonActionPerformed
 
