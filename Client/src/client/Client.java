@@ -745,11 +745,10 @@ public class Client{
                     }
                     else if ( command.equals("VOICE") )
                     {
+                        String me = stringTokenizer.nextToken();
+                        String dest = stringTokenizer.nextToken();
                         if (capture == null)
                         {
-                            String me = stringTokenizer.nextToken();
-                            String dest = stringTokenizer.nextToken();
-
                             String IP = stringTokenizer.nextToken();
                             try   
                             {   
@@ -766,7 +765,7 @@ public class Client{
                         }
                         else
                         {
-                            sendMessage("VOICECANT@ + dest");
+                            sendMessage("VOICECANT@" + dest);
                         }
                     }
                     else if ( command.equals("VOICEIP") )
